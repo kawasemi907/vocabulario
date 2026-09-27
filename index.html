@@ -97,6 +97,15 @@
   }
   .say:active{background:var(--paper-2)}
   .say svg{width:13px;height:13px;fill:currentColor}
+  .say-row{display:flex;align-items:flex-start;gap:12px}
+  .say-row > .headword, .say-row > .ex{flex:1;min-width:0}
+  .ex-row{margin-top:18px}
+  .ex-row > .ex{margin-top:0}
+  .say.big{
+    flex:none;width:52px;height:52px;margin:0;padding:0;justify-content:center;border-radius:50%;
+    border:1.5px solid rgba(200,16,46,.45);color:var(--carmine);background:#fff;
+  }
+  .say.big svg{width:26px;height:26px}
   .rule{height:1px;background:rgba(32,48,63,.14);margin:20px 0 16px}
   .tr{display:flex;gap:10px;font-size:16px;line-height:1.45;padding:3px 0}
   .tr .lg{flex:none;width:22px;font-size:11px;color:var(--muted);padding-top:4px;letter-spacing:.06em}
@@ -111,6 +120,9 @@
   .btn.ghost{border:1px solid var(--line);color:var(--paper)}
   .btn.yes{background:var(--jade);color:#fff}
   .btn:active{transform:translateY(1px)}
+  .btn.prev{flex:0 0 auto;padding:15px 16px}
+  .btn:disabled{opacity:.35}
+  .btn:disabled:active{transform:none}
   .empty{text-align:center;padding:60px 20px;color:#9DB2CB;font-size:15px;line-height:1.8}
   .hide{display:none}
   .seg{display:flex;gap:4px;padding:4px;margin-top:16px;border-radius:12px;background:rgba(247,241,227,.08)}
@@ -1812,10 +1824,15 @@ function renderStudy(){
       <span class="pos">${pos+1} / ${idx.length}　·　覚えた ${s.done}</span></div>
     <div class="topbar"><i style="width:${(pos+1)/idx.length*100}%"></i></div>
     <div class="card ${known?"known":""}">
-      <div class="headword serif">${esc(d.w)}</div>
+      <div class="say-row">
+        <div class="headword serif">${esc(d.w)}</div>
+        <button class="say big" data-say="w" aria-label="単語を読み上げる">${SPK}</button>
+      </div>
       <span class="tag">${esc(d.p)}</span>
-      <button class="say" data-say="w">${SPK}word</button>
-      <p class="ex">${esc(d.ex)} <button class="say" data-say="e">${SPK}frase</button></p>
+      <div class="say-row ex-row">
+        <p class="ex">${esc(d.ex)}</p>
+        <button class="say big" data-say="e" aria-label="例文を読み上げる">${SPK}</button>
+      </div>
       <div id="back" class="${open?"":"hide"}">
         <div class="rule"></div>
         <div class="trs">
@@ -1829,11 +1846,12 @@ function renderStudy(){
         <div class="note"><h3>NOTA</h3>${esc(d.n)}</div>
       </div>
     </div>
-    <div class="acts">${ open
+    <div class="acts"><button class="btn ghost prev" id="prev" aria-label="前の単語に戻る" ${pos===0?"disabled":""}>‹ 前へ</button>${ open
       ? `<button class="btn ghost" id="skip">まだ</button><button class="btn yes" id="got">覚えた</button>`
       : `<button class="btn primary" id="show">答えを見る</button>` }</div>`;
 
   app.querySelector("#bk").onclick = ()=>{ view="home"; render(); };
+  app.querySelector("#prev").onclick = goBack;
   app.querySelectorAll("[data-say]").forEach(b=> b.onclick = ()=> say(b.dataset.say==="w" ? d.w : d.ex));
   if(!open){
     app.querySelector("#show").onclick = ()=>{ cur.open = true; render(); };
@@ -1842,6 +1860,17 @@ function renderStudy(){
     app.querySelector("#got").onclick = ()=>{ S.learned[lvKey(lv,i)] = true; advance(); };
     app.querySelector("#skip").onclick = ()=>{ advance(); };
   }
+}
+
+function goBack(){
+  const {lv, idx, pos} = cur;
+  if(pos <= 0) return;
+  cur.pos = pos - 1; cur.open = false;
+  // 続きから始めるときに、戻った単語から再開できるようにする
+  S.last[lv] = cur.pos > 0 ? idx[cur.pos - 1] : -1;
+  save();
+  render();
+  window.scrollTo(0,0);
 }
 
 function advance(){
