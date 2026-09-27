@@ -97,6 +97,15 @@
   }
   .say:active{background:var(--paper-2)}
   .say svg{width:13px;height:13px;fill:currentColor}
+  .say-row{display:flex;align-items:flex-start;gap:12px}
+  .say-row > .headword, .say-row > .ex{flex:1;min-width:0}
+  .ex-row{margin-top:18px}
+  .ex-row > .ex{margin-top:0}
+  .say.big{
+    flex:none;width:52px;height:52px;margin:0;padding:0;justify-content:center;border-radius:50%;
+    border:1.5px solid rgba(200,16,46,.45);color:var(--carmine);background:#fff;
+  }
+  .say.big svg{width:26px;height:26px}
   .rule{height:1px;background:rgba(32,48,63,.14);margin:20px 0 16px}
   .tr{display:flex;gap:10px;font-size:16px;line-height:1.45;padding:3px 0}
   .tr .lg{flex:none;width:22px;font-size:11px;color:var(--muted);padding-top:4px;letter-spacing:.06em}
@@ -1812,10 +1821,15 @@ function renderStudy(){
       <span class="pos">${pos+1} / ${idx.length}　·　覚えた ${s.done}</span></div>
     <div class="topbar"><i style="width:${(pos+1)/idx.length*100}%"></i></div>
     <div class="card ${known?"known":""}">
-      <div class="headword serif">${esc(d.w)}</div>
+      <div class="say-row">
+        <div class="headword serif">${esc(d.w)}</div>
+        <button class="say big" data-say="w" aria-label="単語を読み上げる">${SPK}</button>
+      </div>
       <span class="tag">${esc(d.p)}</span>
-      <button class="say" data-say="w">${SPK}word</button>
-      <p class="ex">${esc(d.ex)} <button class="say" data-say="e">${SPK}frase</button></p>
+      <div class="say-row ex-row">
+        <p class="ex">${esc(d.ex)}</p>
+        <button class="say big" data-say="e" aria-label="例文を読み上げる">${SPK}</button>
+      </div>
       <div id="back" class="${open?"":"hide"}">
         <div class="rule"></div>
         <div class="trs">
