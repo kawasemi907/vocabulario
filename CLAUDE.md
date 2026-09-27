@@ -64,3 +64,38 @@ console.log("incomplete entries:",bad.length);'
 
 - 1レベル作るごとに検証してコミットする（コミットメッセージ例：`Add Nivel 4`）。
 - アプリのコード部分（HTML/CSS/関数）は、指示がない限り変更しない。
+
+## 例文の単語タップ辞書（GLOSS）
+
+例文の単語をタップすると意味が出る機能のデータ。`index.html` の `const TOTAL_LEVELS = 15;` の直後にある。
+
+```js
+const GLOSS_LEVELS = new Set([1]);   // 単語タップを有効にするレベル
+const GLOSS = {
+  "hablas":[["hablar","動詞","話す","tú・現在"]],
+  "como":[["como","接続詞・副詞","〜のように、〜として",""],["comer","動詞","食べる","yo・現在"]],
+  ...
+};
+```
+
+- キーは例文に出てくる語形を**小文字**にしたもの（アクセント記号はそのまま）。値は `[元の形, 品詞, 日本語の意味, 活用・補足]` の配列で、文脈で意味が変わる語は複数並べる（よく使う意味を先に）。
+- 名詞の元の形は定冠詞付き（la piedra）。品詞は日本語（名詞（男）・名詞（女）・動詞・動詞（再帰）・形容詞・副詞・前置詞・接続詞・代名詞・冠詞・数詞・間投詞・固有名詞 など）。
+- 活用形の補足は「yo・現在」「él/ella・点過去」「tú・命令」「接続法現在」「過去分詞の女性形」などの書き方にそろえる。
+- 新しいレベルに対応するときは、そのレベルの例文の全語形を追加してから `GLOSS_LEVELS` にレベル番号を足す。
+
+検証（GLOSS を追加・変更したら実行）：
+
+```bash
+sed -n '/<script>/,/<\/script>/p' index.html | sed '1d;$d' > /tmp/c.js && node -e '
+const src=require("fs").readFileSync("/tmp/c.js","utf8");
+const L=new Function(src.slice(src.indexOf("const LEVELS"),src.indexOf("const TOTAL_LEVELS"))+"; return LEVELS;")();
+const G=new Function(src.slice(src.indexOf("const GLOSS_LEVELS"),src.indexOf("\n};",src.indexOf("const GLOSS ="))+3)+"; return [GLOSS_LEVELS,GLOSS];")();
+const [lvs,GL]=G;
+L.filter(l=>lvs.has(l.id)).forEach(l=>{
+  const forms=[...new Set(l.words.flatMap(w=>w.ex.toLowerCase().match(/[a-záéíóúüñ]+/g)||[]))];
+  console.log("Level",l.id,"forms:",forms.length,"missing:",forms.filter(f=>!GL[f]));
+});
+console.log("malformed:",Object.keys(GL).filter(k=>!Array.isArray(GL[k])||!GL[k].length||GL[k].some(s=>s.length!==4||!s[0]||!s[1]||!s[2])));'
+```
+
+各レベル `missing: []`、`malformed: []` を確認してからコミットする。
