@@ -120,6 +120,9 @@
   .btn.ghost{border:1px solid var(--line);color:var(--paper)}
   .btn.yes{background:var(--jade);color:#fff}
   .btn:active{transform:translateY(1px)}
+  .btn.prev{flex:0 0 auto;padding:15px 16px}
+  .btn:disabled{opacity:.35}
+  .btn:disabled:active{transform:none}
   .empty{text-align:center;padding:60px 20px;color:#9DB2CB;font-size:15px;line-height:1.8}
   .hide{display:none}
   .seg{display:flex;gap:4px;padding:4px;margin-top:16px;border-radius:12px;background:rgba(247,241,227,.08)}
@@ -1843,11 +1846,12 @@ function renderStudy(){
         <div class="note"><h3>NOTA</h3>${esc(d.n)}</div>
       </div>
     </div>
-    <div class="acts">${ open
+    <div class="acts"><button class="btn ghost prev" id="prev" aria-label="前の単語に戻る" ${pos===0?"disabled":""}>‹ 前へ</button>${ open
       ? `<button class="btn ghost" id="skip">まだ</button><button class="btn yes" id="got">覚えた</button>`
       : `<button class="btn primary" id="show">答えを見る</button>` }</div>`;
 
   app.querySelector("#bk").onclick = ()=>{ view="home"; render(); };
+  app.querySelector("#prev").onclick = goBack;
   app.querySelectorAll("[data-say]").forEach(b=> b.onclick = ()=> say(b.dataset.say==="w" ? d.w : d.ex));
   if(!open){
     app.querySelector("#show").onclick = ()=>{ cur.open = true; render(); };
@@ -1856,6 +1860,17 @@ function renderStudy(){
     app.querySelector("#got").onclick = ()=>{ S.learned[lvKey(lv,i)] = true; advance(); };
     app.querySelector("#skip").onclick = ()=>{ advance(); };
   }
+}
+
+function goBack(){
+  const {lv, idx, pos} = cur;
+  if(pos <= 0) return;
+  cur.pos = pos - 1; cur.open = false;
+  // 続きから始めるときに、戻った単語から再開できるようにする
+  S.last[lv] = cur.pos > 0 ? idx[cur.pos - 1] : -1;
+  save();
+  render();
+  window.scrollTo(0,0);
 }
 
 function advance(){
