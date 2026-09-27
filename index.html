@@ -1,0 +1,803 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Vocabulario — 西検4級</title>
+<meta name="theme-color" content="#0E1F38">
+<meta name="robots" content="noindex, nofollow">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon-192.png">
+<link rel="apple-touch-icon" href="icon-192.png">
+<style>
+  :root{
+    --ink:#0E1F38;
+    --ink-2:#183054;
+    --line:rgba(247,241,227,.16);
+    --paper:#F7F1E3;
+    --paper-2:#EDE4D0;
+    --text:#20303F;
+    --muted:#6E7C88;
+    --carmine:#C8102E;
+    --mustard:#E0A21A;
+    --jade:#2E8B72;
+  }
+  html,body{margin:0;background:#0E1F38}
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  #app{
+    font-family:system-ui,-apple-system,"Segoe UI",Roboto,"Noto Sans JP",sans-serif;
+    color:var(--paper);
+    background:var(--ink);
+    background-image:radial-gradient(circle at 12% -5%, #1E3A63 0%, transparent 55%);
+    min-height:100vh;
+    padding:18px 16px 40px;
+    max-width:560px;
+    margin:0 auto;
+    line-height:1.5;
+  }
+  h1,h2,h3,p,ul,li,figure{margin:0}
+  button{font:inherit;color:inherit;background:none;border:none;padding:0;cursor:pointer}
+  .serif{font-family:Georgia,"Noto Serif","Times New Roman",serif}
+
+  /* ---------- home ---------- */
+  .masthead{display:flex;align-items:baseline;gap:10px;padding-bottom:14px;border-bottom:1px solid var(--line)}
+  .masthead h1{font-size:26px;letter-spacing:.01em;font-weight:600}
+  .masthead span{font-size:12px;color:#8FA5C0;letter-spacing:.06em}
+  .totals{display:flex;align-items:baseline;gap:8px;padding:18px 0 4px}
+  .totals b{font-size:44px;font-weight:600;letter-spacing:-.02em;color:var(--mustard)}
+  .totals small{font-size:13px;color:#9DB2CB}
+
+  .opts{margin:14px 0 20px;border:1px solid var(--line);border-radius:12px;overflow:hidden}
+  .opt{display:flex;align-items:center;gap:12px;padding:13px 14px;font-size:14px}
+  .opt+.opt{border-top:1px solid var(--line)}
+  .opt .lb,.opt label{flex:1;min-width:0}
+  label.opt{cursor:pointer}
+  .sw{width:44px;height:26px;flex:none;border-radius:999px;background:#2B4568;position:relative;transition:background .18s}
+  input[type=checkbox]{position:absolute;opacity:0;pointer-events:none}
+  .sw::after{content:"";position:absolute;top:3px;left:3px;width:20px;height:20px;border-radius:50%;background:var(--paper);transition:transform .18s}
+  input:checked+.sw{background:var(--jade)}
+  input:checked+.sw::after{transform:translateX(18px)}
+  input:focus-visible+.sw{outline:2px solid var(--mustard);outline-offset:2px}
+  .opt input[type=range]{flex:none;width:130px;accent-color:var(--mustard)}
+
+  .levels{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  .lv{
+    text-align:left;border:1px solid var(--line);border-radius:12px;padding:12px 12px 11px;
+    background:linear-gradient(180deg,rgba(247,241,227,.05),rgba(247,241,227,.01));
+    display:flex;flex-direction:column;gap:9px;transition:border-color .15s
+  }
+  .lv:active{border-color:var(--mustard)}
+  .lv[disabled]{opacity:.38}
+  .lv .n{font-size:17px;font-weight:600}
+  .lv .r{font-size:11px;color:#93A9C4;letter-spacing:.04em}
+  .bar{height:5px;border-radius:3px;background:rgba(247,241,227,.14);overflow:hidden}
+  .bar i{display:block;height:100%;background:var(--mustard);border-radius:3px;transition:width .3s}
+  .lv .st{font-size:12px;color:#B9C9DB;display:flex;justify-content:space-between}
+  .lv.done .bar i{background:var(--jade)}
+
+  /* ---------- study ---------- */
+  .top{display:flex;align-items:center;gap:12px;padding-bottom:12px}
+  .back{font-size:14px;color:#9DB2CB;padding:6px 2px}
+  .top .pos{margin-left:auto;font-size:13px;color:#9DB2CB;font-variant-numeric:tabular-nums}
+  .topbar{height:3px;border-radius:2px;background:rgba(247,241,227,.14);overflow:hidden;margin-bottom:18px}
+  .topbar i{display:block;height:100%;background:var(--mustard)}
+
+  .card{
+    background:var(--paper);color:var(--text);border-radius:14px;
+    padding:26px 20px 22px;box-shadow:0 1px 0 rgba(255,255,255,.25) inset;
+    border-top:5px solid var(--carmine);
+  }
+  .card.known{border-top-color:var(--jade)}
+  .headword{font-size:38px;line-height:1.15;font-weight:600;letter-spacing:-.01em;word-break:break-word}
+  .tag{display:inline-block;margin-top:8px;font-size:11px;letter-spacing:.1em;color:var(--carmine);border:1px solid rgba(200,16,46,.35);border-radius:99px;padding:2px 9px}
+  .ex{margin-top:18px;font-size:19px;line-height:1.55}
+  .say{
+    display:inline-flex;align-items:center;gap:6px;margin-left:6px;vertical-align:middle;
+    border:1px solid rgba(32,48,63,.22);border-radius:99px;padding:3px 10px 3px 8px;font-size:12px;color:var(--muted);
+  }
+  .say:active{background:var(--paper-2)}
+  .say svg{width:13px;height:13px;fill:currentColor}
+  .rule{height:1px;background:rgba(32,48,63,.14);margin:20px 0 16px}
+  .tr{display:flex;gap:10px;font-size:16px;line-height:1.45;padding:3px 0}
+  .tr .lg{flex:none;width:22px;font-size:11px;color:var(--muted);padding-top:4px;letter-spacing:.06em}
+  .trs+.trs{margin-top:12px;padding-top:12px;border-top:1px dashed rgba(32,48,63,.16)}
+  .trs .sm{font-size:15px;color:#4A5A67}
+  .note{margin-top:18px;background:var(--paper-2);border-radius:10px;padding:14px 14px 15px;font-size:14px;line-height:1.75}
+  .note h3{font-size:11px;letter-spacing:.12em;color:var(--carmine);margin-bottom:5px;font-weight:600}
+
+  .acts{display:flex;gap:10px;margin-top:18px}
+  .btn{flex:1;text-align:center;padding:15px 10px;border-radius:12px;font-size:16px;font-weight:600}
+  .btn.primary{background:var(--paper);color:var(--ink)}
+  .btn.ghost{border:1px solid var(--line);color:var(--paper)}
+  .btn.yes{background:var(--jade);color:#fff}
+  .btn:active{transform:translateY(1px)}
+  .empty{text-align:center;padding:60px 20px;color:#9DB2CB;font-size:15px;line-height:1.8}
+  .hide{display:none}
+  .seg{display:flex;gap:4px;padding:4px;margin-top:16px;border-radius:12px;background:rgba(247,241,227,.08)}
+  .seg button{flex:1;padding:10px 6px;border-radius:9px;font-size:14px;color:#9DB2CB}
+  .seg button.on{background:var(--paper);color:var(--ink);font-weight:600}
+  .card.auto .line{opacity:.4;transition:opacity .2s}
+  .card.auto .line.cur{opacity:1}
+  .card.auto .en{font-size:17px;color:#4A5A67;margin-top:6px}
+  .card.auto .ex{margin-top:18px}
+  .ctrl{display:flex;gap:10px;margin-top:18px}
+  .ctrl button{flex:1;display:flex;align-items:center;justify-content:center;padding:22px 0;border-radius:14px;border:1px solid var(--line)}
+  .ctrl button svg{width:28px;height:28px;fill:var(--paper)}
+  .ctrl .pp{flex:1.5;background:var(--mustard);border:none}
+  .ctrl .pp svg{fill:var(--ink);width:34px;height:34px}
+  .hint{font-size:12px;color:#9DB2CB;margin-top:16px;line-height:1.8}
+  @media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<div id="app"></div>
+
+<script>
+/* ============ DATA ============ */
+const LEVELS = [
+  {id:1, title:"Nivel 1", range:"1–100", words:[
+{w:"hola",p:"interj",en:"hello, hi",fr:"salut, bonjour",ex:"—¡Hola! ¿Qué tal? —Muy bien, gracias.",exEn:"Hi! How are you? — Very well, thanks.",exFr:"Salut ! Ça va ? — Très bien, merci.",n:"hはスペイン語では常に無音なので「オラ」。英helloや仏holàと同じく、人の注意を引く叫び声から生まれた語とされる。疑問文は前後を¿ ?で挟むのがスペイン語の決まり。"},
+{w:"adiós",p:"interj",en:"goodbye",fr:"au revoir, adieu",ex:"Adiós, hasta mañana.",exEn:"Goodbye, see you tomorrow.",exFr:"Au revoir, à demain.",n:"a + Dios（神へ）が語源。仏adieu、そして英goodbye（God be with ye の短縮）とまったく同じ発想の別れの挨拶。"},
+{w:"sí",p:"adv",en:"yes",fr:"oui",ex:"—¿Hablas español? —Sí, un poco.",exEn:"Do you speak Spanish? — Yes, a little.",exFr:"Tu parles espagnol ? — Oui, un peu.",n:"ラテン語sic（そのように）から。伊sì、仏の肯定のsiも同源。アクセント記号のないsiは「もし」なので、この点は必ず区別する。"},
+{w:"no",p:"adv",en:"no, not",fr:"non, ne...pas",ex:"No hablo francés, pero hablo inglés.",exEn:"I do not speak French, but I speak English.",exFr:"Je ne parle pas français, mais je parle anglais.",n:"ラテン語nonから。仏のようにne...pasで挟む必要はなく、動詞の直前にnoを置くだけで否定文になる。"},
+{w:"gracias",p:"nf pl",en:"thank you",fr:"merci",ex:"Muchas gracias por la paella.",exEn:"Thank you very much for the paella.",exFr:"Merci beaucoup pour la paella.",n:"ラテン語gratia（恵み・好意）の複数形。英grateful・gratitude、仏grâceと同源。必ず複数形で使う。"},
+{w:"por favor",p:"loc",en:"please",fr:"s'il vous plaît",ex:"Un café con leche, por favor.",exEn:"A coffee with milk, please.",exFr:"Un café au lait, s'il vous plaît.",n:"直訳は「好意によって」。favorはラテン語favorem（好意）で英favor・仏faveurと同源。"},
+{w:"el hombre",p:"nm",en:"man",fr:"l'homme",ex:"El hombre del bar conoce a todo el pueblo.",exEn:"The man at the bar knows the whole village.",exFr:"L'homme du bar connaît tout le village.",n:"ラテン語hominem（人）から。仏hommeと同じ語源。hは無音なので「オンブレ」と読む。"},
+{w:"la mujer",p:"nf",en:"woman",fr:"la femme",ex:"Esa mujer baila flamenco mejor que nadie.",exEn:"That woman dances flamenco better than anyone.",exFr:"Cette femme danse le flamenco mieux que personne.",n:"ラテン語mulierem（女性）から。仏femmeはfeminaが語源で、こちらとは別系統。"},
+{w:"el niño",p:"nm",en:"child, boy",fr:"l'enfant, le garçon",ex:"El niño quiere un helado de turrón.",exEn:"The boy wants a nougat ice cream.",exFr:"Le garçon veut une glace au nougat.",n:"幼児のことばに由来するとされる。ñはラテン語のnnを写字生が略記したものから生まれたスペイン語独自の文字。"},
+{w:"la niña",p:"nf",en:"girl",fr:"la fille",ex:"La niña canta en la fiesta del pueblo.",exEn:"The girl sings at the village festival.",exFr:"La fille chante à la fête du village.",n:"niñoの女性形。-oが男性・-aが女性という対応はスペイン語の基本ルール。"},
+{w:"la casa",p:"nf",en:"house, home",fr:"la maison",ex:"Mi casa es tu casa.",exEn:"My house is your house.",exFr:"Ma maison est ta maison.",n:"ラテン語casa（小屋）から。仏語のchez（〜の家で）も同じcasaに遡る。伊casaと同形。"},
+{w:"el libro",p:"nm",en:"book",fr:"le livre",ex:"Este libro de Cervantes pesa como una piedra.",exEn:"This book by Cervantes weighs like a stone.",exFr:"Ce livre de Cervantès pèse comme une pierre.",n:"ラテン語librum（木の内皮＝書写材料）から。仏livre、英libraryと同源。"},
+{w:"el agua",p:"nf",en:"water",fr:"l'eau",ex:"El agua de la fuente está muy fría en enero.",exEn:"The water from the fountain is very cold in January.",exFr:"L'eau de la fontaine est très froide en janvier.",n:"女性名詞だが、強勢のあるa-で始まるため冠詞はelを使う（発音上の理由）。複数はlas aguas。ラテン語aquaから、仏eau・英aquariumと同源。"},
+{w:"la comida",p:"nf",en:"food, lunch",fr:"la nourriture, le repas",ex:"La comida en España empieza a las tres de la tarde.",exEn:"Lunch in Spain starts at three in the afternoon.",exFr:"Le repas en Espagne commence à trois heures de l'après-midi.",n:"comer（食べる）の派生語。ラテン語comedereが語源。スペインではcomida＝昼食を指し、一日で最も重い食事になる。"},
+{w:"el día",p:"nm",en:"day",fr:"le jour",ex:"Buenos días, hace un día precioso.",exEn:"Good morning, it is a beautiful day.",exFr:"Bonjour, il fait une belle journée.",n:"ラテン語diesから。-aで終わるのに男性名詞という有名な例外。英diaryと同源で、仏jour（diurnum由来）とは別ルート。"},
+{w:"la noche",p:"nf",en:"night",fr:"la nuit",ex:"En Madrid la noche empieza cuando otros se acuestan.",exEn:"In Madrid the night begins when others go to bed.",exFr:"À Madrid la nuit commence quand les autres se couchent.",n:"ラテン語noctem。仏nuit、英nocturnalと同源。ラテン語のct→スペイン語chの変化（noctem>noche、octo>ocho）は規則的。"},
+{w:"el año",p:"nm",en:"year",fr:"l'an, l'année",ex:"El último día del año se comen doce uvas.",exEn:"On the last day of the year people eat twelve grapes.",exFr:"Le dernier jour de l'an on mange douze raisins.",n:"ラテン語annumから。仏an、英annualと同源。nn>ñの変化を経ている。añoとano（肛門）はñの有無で全く別語になるので要注意。"},
+{w:"el tiempo",p:"nm",en:"time, weather",fr:"le temps",ex:"No tengo tiempo, pero hace buen tiempo.",exEn:"I have no time, but the weather is good.",exFr:"Je n'ai pas le temps, mais il fait beau temps.",n:"ラテン語tempus。仏tempsとまったく同じく「時間」と「天気」の両方を意味する。英tempo・temporaryと同源。"},
+{w:"la vez",p:"nf",en:"time, occasion",fr:"la fois",ex:"Otra vez llego tarde al trabajo.",exEn:"Once again I am late for work.",exFr:"Encore une fois j'arrive en retard au travail.",n:"ラテン語vicem（順番・交代）から。英vice-（副〜）と同源。複数はveces。「回数のtime」はtiempoではなくvezを使う。"},
+{w:"la cosa",p:"nf",en:"thing",fr:"la chose",ex:"Una cosa es hablar y otra cosa es hacer.",exEn:"Talking is one thing and doing is another.",exFr:"Parler est une chose et faire en est une autre.",n:"ラテン語causa（原因・事柄）から。仏choseも英causeも同じcausaが起源で、「原因」と「もの」に意味が分かれた。"},
+{w:"ser",p:"v",en:"to be (essence)",fr:"être (essence)",ex:"Soy japonés y quiero ser profesor.",exEn:"I am Japanese and I want to be a teacher.",exFr:"Je suis japonais et je veux être professeur.",n:"estarと並ぶ二つの「である」。serは本質・出身・職業に使う。ラテン語esse（英essence）とsedere（座る）が混ざった動詞で、活用が極端に不規則。"},
+{w:"estar",p:"v",en:"to be (state, place)",fr:"être (état, lieu)",ex:"Estoy cansado y el gato está en la mesa.",exEn:"I am tired and the cat is on the table.",exFr:"Je suis fatigué et le chat est sur la table.",n:"ラテン語stare（立つ）から。英state・stationと同源。一時的な状態と「所在」にはestarを使うのが原則。"},
+{w:"tener",p:"v",en:"to have",fr:"avoir",ex:"Tengo hambre y tengo prisa.",exEn:"I am hungry and I am in a hurry.",exFr:"J'ai faim et je suis pressé.",n:"ラテン語tenere（保つ）から、仏tenirと同源。年齢・空腹・寒さもtenerで表す（Tengo treinta años＝30歳です）。"},
+{w:"hacer",p:"v",en:"to do, to make",fr:"faire",ex:"¿Qué haces? Hago una tortilla.",exEn:"What are you doing? I am making an omelette.",exFr:"Que fais-tu ? Je fais une omelette.",n:"ラテン語facere。仏faire、英factory・factと同源。ラテン語のf-がスペイン語で無音のh-に変わる代表例（facere>hacer）。"},
+{w:"ir",p:"v",en:"to go",fr:"aller",ex:"Voy al mercado los sábados.",exEn:"I go to the market on Saturdays.",exFr:"Je vais au marché le samedi.",n:"ラテン語のire・vadere・esseの3語が混ざった超不規則動詞。仏allerも3語の混成で、事情がそっくり。ir a+不定詞で近い未来を表す。"},
+{w:"ver",p:"v",en:"to see, to watch",fr:"voir",ex:"Veo la tele mientras ceno.",exEn:"I watch TV while I have dinner.",exFr:"Je regarde la télé pendant que je dîne.",n:"ラテン語videre。仏voir、英video・visionと同源。"},
+{w:"dar",p:"v",en:"to give",fr:"donner",ex:"Te doy mi palabra.",exEn:"I give you my word.",exFr:"Je te donne ma parole.",n:"ラテン語dare。英donate・dateと同源。仏donnerはdonareが語源で、近い親戚にあたる。"},
+{w:"saber",p:"v",en:"to know (facts)",fr:"savoir",ex:"Solo sé que no sé nada.",exEn:"I only know that I know nothing.",exFr:"Je sais seulement que je ne sais rien.",n:"ラテン語sapere（味がする→賢い）。仏savoir、英sageと同源。原義も生きていて、Sabe a limón は「レモンの味がする」。"},
+{w:"querer",p:"v",en:"to want, to love",fr:"vouloir, aimer",ex:"Te quiero, pero quiero un café primero.",exEn:"I love you, but I want a coffee first.",exFr:"Je t'aime, mais je veux un café d'abord.",n:"ラテン語quaerere（探す・求める）から。英query・questと同源。人を目的語にするとte quiero＝「愛している」になる。"},
+{w:"poder",p:"v",en:"to be able, can",fr:"pouvoir",ex:"No puedo más, estoy agotado.",exEn:"I cannot take any more, I am exhausted.",exFr:"Je n'en peux plus, je suis épuisé.",n:"ラテン語potere。仏pouvoir、英power・possibleと同源。仏と同じく名詞で「権力」の意味にもなる。"},
+{w:"decir",p:"v",en:"to say, to tell",fr:"dire",ex:"Dicen que en Galicia siempre llueve.",exEn:"They say it always rains in Galicia.",exFr:"On dit qu'il pleut toujours en Galice.",n:"ラテン語dicere。仏dire、英dictionary・predictと同源。Dicen que...は仏On dit que...にあたる便利な言い回し。"},
+{w:"venir",p:"v",en:"to come",fr:"venir",ex:"Ven aquí, la cena está lista.",exEn:"Come here, dinner is ready.",exFr:"Viens ici, le dîner est prêt.",n:"ラテン語venire。仏venirと同形同源。英adventure・eventも同じ語根から。"},
+{w:"hablar",p:"v",en:"to speak, to talk",fr:"parler",ex:"Hablo español, inglés y un poco de francés.",exEn:"I speak Spanish, English and a little French.",exFr:"Je parle espagnol, anglais et un peu français.",n:"ラテン語fabulari（物語る）から。英fable・仏fableと同源。ここでもf->hの変化が起きている。"},
+{w:"comer",p:"v",en:"to eat",fr:"manger",ex:"En Japón se come pescado crudo; en España, jamón crudo.",exEn:"In Japan people eat raw fish; in Spain, raw ham.",exFr:"Au Japon on mange du poisson cru ; en Espagne, du jambon cru.",n:"ラテン語comedere（食べ尽くす）。仏mangerはmanducare由来で別語源。se comeは「（一般に）食べる」を表す無人称のse。"},
+{w:"beber",p:"v",en:"to drink",fr:"boire",ex:"Los españoles beben vino con la comida.",exEn:"Spaniards drink wine with their meal.",exFr:"Les Espagnols boivent du vin pendant le repas.",n:"ラテン語bibere。仏boire、英beverage・imbibeと同源。"},
+{w:"vivir",p:"v",en:"to live",fr:"vivre",ex:"Vivo en una ciudad pequeña de Japón.",exEn:"I live in a small city in Japan.",exFr:"J'habite dans une petite ville du Japon.",n:"ラテン語vivere。仏vivre、英vivid・surviveと同源。名詞la vidaと同じ語根。"},
+{w:"trabajar",p:"v",en:"to work",fr:"travailler",ex:"Trabajo de lunes a viernes.",exEn:"I work from Monday to Friday.",exFr:"Je travaille du lundi au vendredi.",n:"俗ラテン語tripaliare（拷問具tripaliumで苦しめる）から。仏travaillerも同源で、「労働＝苦役」という古い発想を今も共有している。"},
+{w:"estudiar",p:"v",en:"to study",fr:"étudier",ex:"Estudio español porque quiero vivir en Sevilla.",exEn:"I study Spanish because I want to live in Seville.",exFr:"J'étudie l'espagnol parce que je veux vivre à Séville.",n:"ラテン語studere（熱心である）。英study、仏étudierと同源で、原義は「熱意」。"},
+{w:"comprar",p:"v",en:"to buy",fr:"acheter",ex:"Compro pan fresco cada mañana.",exEn:"I buy fresh bread every morning.",exFr:"J'achète du pain frais chaque matin.",n:"ラテン語comparare（そろえる・比べる）から。英compareと同じ語源だが、スペイン語では「買う」に意味が移った。"},
+{w:"bueno",p:"adj",en:"good",fr:"bon",ex:"Este vino es muy bueno y muy barato.",exEn:"This wine is very good and very cheap.",exFr:"Ce vin est très bon et très bon marché.",n:"ラテン語bonum。仏bon、英bonusと同源。男性名詞の前ではbuenと短くなる（un buen amigo）。"},
+{w:"malo",p:"adj",en:"bad",fr:"mauvais",ex:"Hace mal tiempo, pero salir no es mala idea.",exEn:"The weather is bad, but going out is not a bad idea.",exFr:"Il fait mauvais, mais sortir n'est pas une mauvaise idée.",n:"ラテン語malum。仏mauvais、英malice・malfunctionと同源。男性名詞の前ではmalに短縮される。"},
+{w:"grande",p:"adj",en:"big, great",fr:"grand",ex:"Madrid es una ciudad muy grande.",exEn:"Madrid is a very big city.",exFr:"Madrid est une très grande ville.",n:"ラテン語grandem、仏grandと同源。名詞の前ではgranになり、意味も「偉大な」に変わる（un gran hombre＝偉人）。位置で意味が変わる点は仏grandとよく似ている。"},
+{w:"pequeño",p:"adj",en:"small, little",fr:"petit",ex:"Vivo en un piso pequeño pero bonito.",exEn:"I live in a small but pretty flat.",exFr:"J'habite dans un petit appartement mais joli.",n:"明確なラテン語の語源がなく、幼児語起源とされる珍しい語。仏petitも同じく幼児語由来と考えられている。"},
+{w:"nuevo",p:"adj",en:"new",fr:"nouveau, neuf",ex:"Tengo un coche nuevo; bueno, nuevo para mí.",exEn:"I have a new car; well, new to me.",exFr:"J'ai une nouvelle voiture ; enfin, nouvelle pour moi.",n:"ラテン語novum。仏nouveau、英novel・renovateと同源。ラテン語のoがueに割れる二重母音化（novum>nuevo）はスペイン語の大きな特徴。"},
+{w:"viejo",p:"adj",en:"old",fr:"vieux",ex:"Mi abuelo es viejo pero baila mejor que yo.",exEn:"My grandfather is old but he dances better than me.",exFr:"Mon grand-père est vieux mais il danse mieux que moi.",n:"ラテン語vetulum。仏vieux、英veteranと同源。"},
+{w:"mucho",p:"adj/adv",en:"much, many, a lot",fr:"beaucoup (de)",ex:"Hay mucha gente en la plaza.",exEn:"There are a lot of people in the square.",exFr:"Il y a beaucoup de monde sur la place.",n:"ラテン語multum。英multi-、仏multipleと同源。形容詞なので後ろの名詞に合わせてmucha/muchos/muchasと変化する点が仏beaucoup deと違う。"},
+{w:"poco",p:"adj/adv",en:"little, few",fr:"peu (de)",ex:"Hablo poco francés, pero entiendo mucho.",exEn:"I speak little French, but I understand a lot.",exFr:"Je parle peu le français, mais je comprends beaucoup.",n:"ラテン語paucum。仏peu、英paucity・fewと同源。un poco de＋名詞で「少しの〜」。"},
+{w:"todo",p:"adj/pron",en:"all, everything",fr:"tout",ex:"Todo el mundo conoce esta canción.",exEn:"Everybody knows this song.",exFr:"Tout le monde connaît cette chanson.",n:"ラテン語totum。仏tout、英totalと同源。todo el mundoは直訳すると「全世界」だが、仏tout le mondeと同じく「みんな」の意味。"},
+{w:"otro",p:"adj/pron",en:"other, another",fr:"autre",ex:"¿Me pones otra caña, por favor?",exEn:"Could you get me another small beer, please?",exFr:"Tu me sers une autre bière pression, s'il te plaît ?",n:"ラテン語alterum。仏autre、英alterと同源。仏un autreと違い、スペイン語ではunを付けずotroとだけ言う。cañaは小さめの生ビール。"},
+{w:"mismo",p:"adj",en:"same, -self",fr:"même",ex:"Vivimos en la misma calle.",exEn:"We live on the same street.",exFr:"Nous habitons dans la même rue.",n:"俗ラテン語metipsimum（まさにその人自身）から。仏mêmeも同じ語源で、「同じ」と「〜自身」の二役を兼ねる点まで共通している。"},
+{w:"yo",p:"pron",en:"I",fr:"je, moi",ex:"Yo pago hoy, tú pagas mañana.",exEn:"I pay today, you pay tomorrow.",exFr:"Moi je paie aujourd'hui, toi tu paies demain.",n:"ラテン語ego。仏je、英egoと同源。活用語尾で主語が分かるため普段は省略し、対比や強調のときだけ置く。"},
+{w:"tú",p:"pron",en:"you (informal)",fr:"tu",ex:"¿Tú vienes o te quedas?",exEn:"Are you coming or are you staying?",exFr:"Tu viens ou tu restes ?",n:"ラテン語tu。仏tu、英thouと同源。丁寧形はustedで、これは動詞を三人称で活用させる。アクセントのないtuは「君の」。"},
+{w:"él",p:"pron",en:"he, him",fr:"il, lui",ex:"Él cocina y ella friega los platos.",exEn:"He cooks and she washes the dishes.",exFr:"Il cuisine et elle fait la vaisselle.",n:"ラテン語ille（あの）から。仏ilも、さらに定冠詞le/laも同じilleに遡る。アクセントのないelは定冠詞なので区別が必要。"},
+{w:"ella",p:"pron",en:"she, her",fr:"elle",ex:"Ella toca la guitarra en un grupo.",exEn:"She plays the guitar in a band.",exFr:"Elle joue de la guitare dans un groupe.",n:"ラテン語illaから。仏elleと同源。楽器を「演奏する」はtocar（＝触れる）を使う。"},
+{w:"nosotros",p:"pron",en:"we, us",fr:"nous",ex:"Nosotros somos de Japón.",exEn:"We are from Japan.",exFr:"Nous, nous sommes du Japon.",n:"nos（我々）+ otros（他の人々）の合成語。仏nousと同じnosが核。女性だけの集団ならnosotras。"},
+{w:"y",p:"conj",en:"and",fr:"et",ex:"Pan y vino, nada más.",exEn:"Bread and wine, nothing more.",exFr:"Du pain et du vin, rien de plus.",n:"ラテン語et、仏etと同源。i-やhi-で始まる語の前ではeに変わる（padre e hijo）。発音の衝突を避けるための決まり。"},
+{w:"o",p:"conj",en:"or",fr:"ou",ex:"¿Té o café?",exEn:"Tea or coffee?",exFr:"Thé ou café ?",n:"ラテン語aut、仏ouと同源。o-やho-で始まる語の前ではuに変わる（siete u ocho）。yのルールと対になっている。"},
+{w:"pero",p:"conj",en:"but",fr:"mais",ex:"Quiero salir, pero llueve.",exEn:"I want to go out, but it is raining.",exFr:"Je veux sortir, mais il pleut.",n:"ラテン語per hoc（これによって）から。仏maisはmagis（もっと）由来なので別系統。スペイン語ではそのmagisがmás（もっと）になっている。"},
+{w:"porque",p:"conj",en:"because",fr:"parce que",ex:"No voy porque estoy cansado.",exEn:"I am not going because I am tired.",exFr:"Je n'y vais pas parce que je suis fatigué.",n:"por + que の合成で、仏parce queと構造がそっくり。分かち書きのpor quéは「なぜ」、el porquéは名詞で「理由」。"},
+{w:"que",p:"conj/pron",en:"that, which, who",fr:"que, qui",ex:"El libro que leo es de Borges.",exEn:"The book I am reading is by Borges.",exFr:"Le livre que je lis est de Borges.",n:"ラテン語quid/quemから。仏queと同源。関係代名詞・接続詞・比較（más que）のすべてを兼ねる万能語。"},
+{w:"con",p:"prep",en:"with",fr:"avec",ex:"Café con leche y churros con chocolate.",exEn:"Coffee with milk and churros with chocolate.",exFr:"Café au lait et churros au chocolat.",n:"ラテン語cum。英company・connectのcon-と同源。仏avecはapud hocc由来で別系統。conmigo（私と）、contigo（君と）は特殊な融合形。"},
+{w:"sin",p:"prep",en:"without",fr:"sans",ex:"Una tortilla sin cebolla no es una tortilla.",exEn:"An omelette without onion is not an omelette.",exFr:"Une omelette sans oignon n'est pas une omelette.",n:"ラテン語sine。仏sansと同源。トルティージャに玉ねぎを入れるか否か（con o sin cebolla）はスペインの国民的論争。"},
+{w:"para",p:"prep",en:"for, in order to",fr:"pour",ex:"Este regalo es para ti.",exEn:"This present is for you.",exFr:"Ce cadeau est pour toi.",n:"ラテン語pro adの縮約から。目的・宛先・期限を表す。porとの使い分けはスペイン語学習の最初の関門で、仏pourとparの違いに近い感覚。"},
+{w:"por",p:"prep",en:"by, through, because of",fr:"par, pour",ex:"Gracias por todo.",exEn:"Thanks for everything.",exFr:"Merci pour tout.",n:"ラテン語pro/perから。仏par、英per-と同源。理由・手段・経路・交換を表す。paraが「向かう先」、porが「もと・経由」と覚えるとよい。"},
+{w:"en",p:"prep",en:"in, on, at",fr:"dans, en, sur",ex:"Estoy en casa, en la cocina.",exEn:"I am at home, in the kitchen.",exFr:"Je suis à la maison, dans la cuisine.",n:"ラテン語in。仏en、英inと同源。スペイン語のenは「中に」も「上に」も一語でカバーするので、仏dans/surの区別より楽。"},
+{w:"de",p:"prep",en:"of, from",fr:"de",ex:"Soy de Japón, de una ciudad cerca del mar.",exEn:"I am from Japan, from a city near the sea.",exFr:"Je viens du Japon, d'une ville près de la mer.",n:"ラテン語de、仏deと同形同源。de + el は例外なくdelに縮約される（仏de + le = du と同じ現象）。"},
+{w:"a",p:"prep",en:"to, at",fr:"à",ex:"Voy a Barcelona a ver a mi amigo.",exEn:"I am going to Barcelona to see my friend.",exFr:"Je vais à Barcelone voir mon ami.",n:"ラテン語ad。仏àと同源。直接目的語が人のときはその前にaを置く（人称のa）という、仏語にはないルールがある。a + el は必ずalに縮約。"},
+{w:"muy",p:"adv",en:"very",fr:"très",ex:"Es muy tarde y estoy muy cansado.",exEn:"It is very late and I am very tired.",exFr:"Il est très tard et je suis très fatigué.",n:"muchoと同じラテン語multumから分かれた形。形容詞・副詞の前ではmuy、動詞の後ろではmuchoと使い分ける（Trabajo mucho）。"},
+{w:"también",p:"adv",en:"also, too",fr:"aussi",ex:"Yo también quiero postre.",exEn:"I want dessert too.",exFr:"Moi aussi je veux un dessert.",n:"tan（それほど）+ bien（よく）の合成語。否定文で「〜も」と言うときはtampocoに切り替える（Yo tampoco＝私も〜ない）。"},
+{w:"siempre",p:"adv",en:"always",fr:"toujours",ex:"Siempre llego tarde; es una tradición familiar.",exEn:"I am always late; it is a family tradition.",exFr:"J'arrive toujours en retard ; c'est une tradition familiale.",n:"ラテン語semperから。英語のsemper fidelisのsemperと同じ語。para siempreで「永遠に」。"},
+{w:"nunca",p:"adv",en:"never",fr:"jamais",ex:"Nunca como pulpo, pero hoy sí.",exEn:"I never eat octopus, but today I will.",exFr:"Je ne mange jamais de poulpe, mais aujourd'hui si.",n:"ラテン語numquam。動詞の前に置けばnoは不要だが、後ろに置くならNo como nunca のようにnoも必要。仏ne...jamaisと発想が近い二重否定。"},
+{w:"ahora",p:"adv",en:"now",fr:"maintenant",ex:"Ahora no puedo, te llamo luego.",exEn:"I cannot right now, I will call you later.",exFr:"Là je ne peux pas, je t'appelle plus tard.",n:"ラテン語hac hora（この時に）の縮約。horaは英hour・仏heureと同源。"},
+{w:"hoy",p:"adv",en:"today",fr:"aujourd'hui",ex:"Hoy es lunes y ya quiero que sea viernes.",exEn:"Today is Monday and I already want it to be Friday.",exFr:"Aujourd'hui c'est lundi et je veux déjà que ce soit vendredi.",n:"ラテン語hodie（この日）から。仏aujourd'huiの中のhuiと同源。ちなみにこの例文のseaは接続法（4級の出題範囲）。"},
+{w:"mañana",p:"adv/nf",en:"tomorrow, morning",fr:"demain, matin",ex:"Mañana por la mañana salimos temprano.",exEn:"Tomorrow morning we leave early.",exFr:"Demain matin nous partons tôt.",n:"ラテン語mane（朝）から。「明日」と「朝」を一語で兼ねる。por la mañanaで「午前中に」。"},
+{w:"ayer",p:"adv",en:"yesterday",fr:"hier",ex:"Ayer comí demasiado jamón.",exEn:"Yesterday I ate too much ham.",exFr:"Hier j'ai mangé trop de jambon.",n:"ラテン語ad heriから。仏hier、英yesterdayのyester-と同源。"},
+{w:"aquí",p:"adv",en:"here",fr:"ici",ex:"Aquí se habla español.",exEn:"Spanish is spoken here.",exFr:"Ici on parle espagnol.",n:"ラテン語eccum hic（ほら、ここに）から。仏iciと同じhicが核。中南米ではacáの方がよく使われる。"},
+{w:"allí",p:"adv",en:"there (over there)",fr:"là-bas",ex:"Mi pueblo está allí, detrás de la montaña.",exEn:"My village is over there, behind the mountain.",exFr:"Mon village est là-bas, derrière la montagne.",n:"ラテン語ad illicから。aquí（話し手の近く）/ ahí（相手の近く）/ allí（両者から遠い）の3段階があり、日本語のこ・そ・あと同じ構造。"},
+{w:"bien",p:"adv",en:"well",fr:"bien",ex:"Cocinas muy bien.",exEn:"You cook very well.",exFr:"Tu cuisines très bien.",n:"ラテン語bene。仏bienと同形同源。形容詞buenoと副詞bienの使い分けは、仏bon/bienとまったく同じ関係。"},
+{w:"mal",p:"adv",en:"badly",fr:"mal",ex:"Canto mal, pero canto con ganas.",exEn:"I sing badly, but I sing with enthusiasm.",exFr:"Je chante mal, mais je chante avec envie.",n:"ラテン語male、仏malと同形同源。形容詞maloに対する副詞形で、bueno/bienの関係と平行している。"},
+{w:"más",p:"adv",en:"more",fr:"plus",ex:"Quiero más tapas, por favor.",exEn:"I want more tapas, please.",exFr:"Je veux plus de tapas, s'il vous plaît.",n:"ラテン語magisから。仏maisと同語源だが、フランス語では「しかし」に意味が移った。比較級はmás ... queで作る（仏plus ... que）。"},
+{w:"menos",p:"adv",en:"less, fewer",fr:"moins",ex:"Menos hablar y más trabajar.",exEn:"Less talking and more working.",exFr:"Moins parler et plus travailler.",n:"ラテン語minus。仏moins、英minusと同源。時刻では「〜分前」を表す（las tres menos diez＝2時50分）。"},
+{w:"el amigo",p:"nm",en:"friend",fr:"l'ami",ex:"Un amigo español me enseña palabras nuevas.",exEn:"A Spanish friend teaches me new words.",exFr:"Un ami espagnol m'apprend de nouveaux mots.",n:"ラテン語amicum（amare「愛する」から）。仏ami、英amicableと同源。"},
+{w:"la familia",p:"nf",en:"family",fr:"la famille",ex:"En España la familia come junta los domingos.",exEn:"In Spain the family eats together on Sundays.",exFr:"En Espagne la famille mange ensemble le dimanche.",n:"ラテン語familia（もとは使用人まで含めた「家全体」）。仏famille、英familyと同源。"},
+{w:"el padre",p:"nm",en:"father",fr:"le père",ex:"Mi padre no habla español, pero le encanta la paella.",exEn:"My father does not speak Spanish, but he loves paella.",exFr:"Mon père ne parle pas espagnol, mais il adore la paella.",n:"ラテン語patrem。仏père、英paternalと同源。複数形los padresは「両親」の意味にもなる。"},
+{w:"la madre",p:"nf",en:"mother",fr:"la mère",ex:"Mi madre siempre dice que como poco.",exEn:"My mother always says that I eat too little.",exFr:"Ma mère dit toujours que je mange trop peu.",n:"ラテン語matrem。仏mère、英maternalと同源。"},
+{w:"el hijo",p:"nm",en:"son",fr:"le fils",ex:"Su hijo estudia en Salamanca.",exEn:"Their son studies in Salamanca.",exFr:"Leur fils étudie à Salamanque.",n:"ラテン語filium。仏fils、英filialと同源。f->hの変化の代表例（filium>hijo）で、hは無音。"},
+{w:"la ciudad",p:"nf",en:"city",fr:"la ville, la cité",ex:"Toledo es una ciudad con mil años de historia.",exEn:"Toledo is a city with a thousand years of history.",exFr:"Tolède est une ville avec mille ans d'histoire.",n:"ラテン語civitatem。仏cité、英cityと同源。-dadで終わる名詞はすべて女性名詞で、仏の-téとぴったり対応する（ciudad/cité、libertad/liberté）。"},
+{w:"el país",p:"nm",en:"country",fr:"le pays",ex:"España es un país de muchas lenguas.",exEn:"Spain is a country of many languages.",exFr:"L'Espagne est un pays de nombreuses langues.",n:"フランス語paysからの借用語。もとはラテン語pagus（村・地方）で、英peasantとも同源。スペインにはカタルーニャ語・ガリシア語・バスク語などの公用語がある。"},
+{w:"la calle",p:"nf",en:"street",fr:"la rue",ex:"La calle está llena de gente a medianoche.",exEn:"The street is full of people at midnight.",exFr:"La rue est pleine de monde à minuit.",n:"ラテン語callem（小道）から。仏rue（ruga由来）とは別語源。llの発音は地域差が大きく、「リャ」「ジャ」「シャ」と変わる。"},
+{w:"el trabajo",p:"nm",en:"work, job",fr:"le travail",ex:"Busco trabajo en Madrid.",exEn:"I am looking for a job in Madrid.",exFr:"Je cherche du travail à Madrid.",n:"trabajarの名詞形。仏travailと同源で、どちらも拷問具tripaliumが語源という共通の来歴を持つ。"},
+{w:"la escuela",p:"nf",en:"school",fr:"l'école",ex:"Los niños salen de la escuela a las dos.",exEn:"The children leave school at two.",exFr:"Les enfants sortent de l'école à deux heures.",n:"ラテン語schola（元はギリシャ語で「余暇」）。仏école、英schoolと同源。ラテン語のsc-の前にeが付くのはスペイン語の癖（Spain>España、school>escuela）。"},
+{w:"el dinero",p:"nm",en:"money",fr:"l'argent",ex:"No tengo dinero, pero tengo amigos.",exEn:"I have no money, but I have friends.",exFr:"Je n'ai pas d'argent, mais j'ai des amis.",n:"ローマの銀貨denariusに由来し、英dinar・仏denierと同源。仏argent（＝銀）とは別の語だが、どちらも貨幣の材料から来ている点は共通。"},
+{w:"la mano",p:"nf",en:"hand",fr:"la main",ex:"Come con la mano, es más rápido.",exEn:"Eat with your hand, it is faster.",exFr:"Mange avec la main, c'est plus rapide.",n:"ラテン語manum。仏main、英manualと同源。-oで終わるのに女性名詞という有名な例外（la mano）。"},
+{w:"el ojo",p:"nm",en:"eye",fr:"l'œil",ex:"¡Ojo! El escalón es alto.",exEn:"Careful! The step is high.",exFr:"Attention ! La marche est haute.",n:"ラテン語oculum。仏œil、英ocularと同源。¡Ojo!の一語だけで「気をつけて！」という決まり文句になる。"},
+{w:"el coche",p:"nm",en:"car",fr:"la voiture",ex:"Mi coche es viejo pero nunca falla.",exEn:"My car is old but it never fails.",exFr:"Ma voiture est vieille mais elle ne tombe jamais en panne.",n:"ハンガリーの町Kocsの馬車が語源で、英coachと同じ出自。中南米ではcarroやautoの方が一般的。"},
+{w:"la mesa",p:"nf",en:"table",fr:"la table",ex:"La mesa está puesta. ¡A comer!",exEn:"The table is set. Time to eat!",exFr:"La table est mise. À table !",n:"ラテン語mensa（食卓）。仏tableとは別語源。英語のmesa（台地）はスペイン語からそのまま借用された語。"},
+{w:"la puerta",p:"nf",en:"door",fr:"la porte",ex:"Cierra la puerta, que hace frío.",exEn:"Close the door, it is cold.",exFr:"Ferme la porte, il fait froid.",n:"ラテン語portam。仏porte、英portalと同源。o->ueの二重母音化（porta>puerta）の典型例。"},
+{w:"el nombre",p:"nm",en:"name",fr:"le nom",ex:"¿Cuál es tu nombre completo?",exEn:"What is your full name?",exFr:"Quel est ton nom complet ?",n:"ラテン語nomen。仏nom、英nameと同源。スペイン語圏では父方と母方の二つの姓を持つのが普通なので、nombre completoは長くなりがち。"},
+{w:"la vida",p:"nf",en:"life",fr:"la vie",ex:"Así es la vida.",exEn:"That is life.",exFr:"C'est la vie.",n:"ラテン語vitam。仏vie、英vitalと同源。vivir（生きる）と同じ語根。"},
+{w:"el mundo",p:"nm",en:"world",fr:"le monde",ex:"Todo el mundo quiere ir a Ibiza en agosto.",exEn:"Everybody wants to go to Ibiza in August.",exFr:"Tout le monde veut aller à Ibiza en août.",n:"ラテン語mundum（原義は「清潔な・秩序ある」）。仏monde、英mundaneと同源。todo el mundoは仏tout le mondeと同じく「みんな」。"}
+]},
+  {id:2, title:"Nivel 2", range:"101–200", words:[
+{w:"llegar",p:"v",en:"to arrive",fr:"arriver",ex:"Mi amigo llegó a la cena con una hora de retraso, pero con postre.",exEn:"My friend arrived at dinner an hour late, but with dessert.",exFr:"Mon ami est arrivé au dîner avec une heure de retard, mais avec le dessert.",n:"ラテン語plicare（たたむ→船を岸に寄せる）から。仏arriver（ad + ripa「岸」）と同じく「岸に着く」が原義。llegóは点過去で、完了した一回の出来事を表す。"},
+{w:"salir",p:"v",en:"to go out, to leave",fr:"sortir, partir",ex:"Anoche salimos de tapas y volvimos a las tres.",exEn:"Last night we went out for tapas and came back at three.",exFr:"Hier soir nous sommes sortis manger des tapas et nous sommes rentrés à trois heures.",n:"ラテン語salire（跳ぶ）から。仏saillir（突き出る）、英salientと同源。一人称現在はsalgoと不規則。ir de tapasは「タパスをはしごする」。"},
+{w:"entrar",p:"v",en:"to enter, to go in",fr:"entrer",ex:"Entré en la catedral de Sevilla y me perdí dentro.",exEn:"I went into Seville cathedral and got lost inside.",exFr:"Je suis entré dans la cathédrale de Séville et je m'y suis perdu.",n:"ラテン語intrare。仏entrer、英enterと同源。スペインでは entrar en、中南米では entrar a もよく使う。セビーリャ大聖堂はゴシック様式として世界最大級。"},
+{w:"volver",p:"v",en:"to return, to come back",fr:"revenir, rentrer",ex:"Volví de México con tres kilos más y cero arrepentimientos.",exEn:"I came back from Mexico three kilos heavier and with zero regrets.",exFr:"Je suis revenu du Mexique avec trois kilos de plus et zéro regret.",n:"ラテン語volvere（回す・転がす）から。英revolve・volume（巻物）と同源。volver a + 不定詞で「再び〜する」（Volví a llamar＝もう一度電話した）。"},
+{w:"llamar",p:"v",en:"to call",fr:"appeler",ex:"Mi madre me llama todos los domingos a la hora de comer.",exEn:"My mother calls me every Sunday at lunchtime.",exFr:"Ma mère m'appelle tous les dimanches à l'heure du déjeuner.",n:"ラテン語clamare（叫ぶ）から。英claim・exclaimと同源。語頭のcl-がll-に変わるのはスペイン語の規則（clavem>llave「鍵」）。Me llamo...（私の名前は）もこの動詞。"},
+{w:"llevar",p:"v",en:"to carry, to take, to wear",fr:"porter, emporter",ex:"Siempre llevo un paraguas, y por eso nunca llueve.",exEn:"I always carry an umbrella, and that is why it never rains.",exFr:"Je porte toujours un parapluie, et c'est pour ça qu'il ne pleut jamais.",n:"ラテン語levare（持ち上げる）から。仏lever、英lever・elevateと同源。「運ぶ」「身につける」「（時間が）経つ」など意味が広い便利な動詞。"},
+{w:"dejar",p:"v",en:"to leave, to let",fr:"laisser",ex:"Dejé las llaves dentro del coche. Otra vez.",exEn:"I left the keys inside the car. Again.",exFr:"J'ai laissé les clés dans la voiture. Encore.",n:"ラテン語laxare（緩める）から。仏laisserと同源で意味もほぼ同じ。dejar de + 不定詞で「〜するのをやめる」（Dejé de fumar）。"},
+{w:"pasar",p:"v",en:"to pass, to happen, to spend (time)",fr:"passer, se passer",ex:"—¿Qué te pasa? —Nada, he pasado la tarde durmiendo la siesta.",exEn:"What is wrong with you? — Nothing, I have spent the afternoon napping.",exFr:"Qu'est-ce qui t'arrive ? — Rien, j'ai passé l'après-midi à faire la sieste.",n:"ラテン語passus（歩み）から。「通る」「起こる」「過ごす」を一語で表すのは仏passerとそっくり。he pasadoは現在完了で、今日・今週など現在に続く時間の出来事に使う。"},
+{w:"poner",p:"v",en:"to put",fr:"mettre, poser",ex:"—¿Dónde has puesto mis gafas? —Las llevas en la cabeza.",exEn:"Where have you put my glasses? — You are wearing them on your head.",exFr:"Où as-tu mis mes lunettes ? — Tu les as sur la tête.",n:"ラテン語ponere。英position・postpone、仏pondre（卵を産む）と同源。過去分詞puestoは不規則なので要暗記。"},
+{w:"pensar",p:"v",en:"to think",fr:"penser",ex:"Pienso en ti cada vez que como churros.",exEn:"I think of you every time I eat churros.",exFr:"Je pense à toi chaque fois que je mange des churros.",n:"ラテン語pensare（重さを量る）から。仏penser、英pensiveと同源。e→ieの語幹母音変化動詞（pienso, piensas…）。「〜のことを考える」はpensar en。"},
+{w:"creer",p:"v",en:"to believe, to think",fr:"croire",ex:"Creo que el gato me entiende, pero no quiere obedecer.",exEn:"I think the cat understands me, but it does not want to obey.",exFr:"Je crois que le chat me comprend, mais il ne veut pas obéir.",n:"ラテン語credere。仏croire、英credit・credibleと同源。Creo que...は意見を言う基本表現。否定のNo creo que...では後ろが接続法になる（4級範囲）。"},
+{w:"conocer",p:"v",en:"to know (people, places)",fr:"connaître",ex:"¿Conoces Granada? Yo la conocí el año pasado y me enamoré.",exEn:"Do you know Granada? I got to know it last year and fell in love.",exFr:"Tu connais Grenade ? Je l'ai découverte l'an dernier et j'en suis tombé amoureux.",n:"ラテン語cognoscere。仏connaître、英recognizeと同源。saberが「知識として知る」のに対し、conocerは人・場所を体験的に知る。仏savoir/connaîtreの区別とまったく同じ。"},
+{w:"parecer",p:"v",en:"to seem, to look like",fr:"sembler, paraître",ex:"Parece fácil, pero bailar sevillanas es muy difícil.",exEn:"It looks easy, but dancing sevillanas is very difficult.",exFr:"Ça a l'air facile, mais danser les sevillanas est très difficile.",n:"ラテン語parere（現れる）の派生。仏paraître、英appearと同源。¿Qué te parece?（どう思う？）は意見を聞く定番表現。"},
+{w:"encontrar",p:"v",en:"to find, to meet",fr:"trouver, rencontrer",ex:"Encontré veinte euros en un abrigo viejo. ¡Qué día!",exEn:"I found twenty euros in an old coat. What a day!",exFr:"J'ai trouvé vingt euros dans un vieux manteau. Quelle journée !",n:"en + contra（〜に向かって）から。仏rencontrer、英encounterと同源。o→ueの語幹母音変化（encuentro）。"},
+{w:"esperar",p:"v",en:"to wait, to hope",fr:"attendre, espérer",ex:"Te espero en la plaza; espero que no llueva.",exEn:"I will wait for you in the square; I hope it does not rain.",exFr:"Je t'attends sur la place ; j'espère qu'il ne pleuvra pas.",n:"ラテン語sperare（望む）から。仏espérer、英desperateと同源。「待つ」と「望む」を一語で兼ねる。esperar que + 接続法（llueva）は4級頻出。"},
+{w:"buscar",p:"v",en:"to look for",fr:"chercher",ex:"Busco piso en Barcelona, pero los precios dan miedo.",exEn:"I am looking for a flat in Barcelona, but the prices are scary.",exFr:"Je cherche un appartement à Barcelone, mais les prix font peur.",n:"語源ははっきりしない語。英look forと違い前置詞が不要（Busco las llaves）。人を探すときは人称のaが付く（Busco a mi hermano）。"},
+{w:"necesitar",p:"v",en:"to need",fr:"avoir besoin de",ex:"Necesito unas vacaciones de mis vacaciones.",exEn:"I need a holiday from my holiday.",exFr:"J'ai besoin de vacances après mes vacances.",n:"ラテン語necessitas（必要）から。英necessaryと同源。仏語はavoir besoin deと言うが、スペイン語は動詞一語で済む。"},
+{w:"gustar",p:"v",en:"to like (to be pleasing)",fr:"aimer, plaire",ex:"Me gustan los churros, pero me gusta más dormir.",exEn:"I like churros, but I like sleeping more.",exFr:"J'aime les churros, mais j'aime encore plus dormir.",n:"ラテン語gustare（味わう）から。英gusto、仏goûtと同源。「〜が私に気に入る」という構文で、好きなものが主語。だから複数ならgustanになる。仏Ça me plaîtと同じ発想。"},
+{w:"empezar",p:"v",en:"to begin, to start",fr:"commencer",ex:"La película empezó a las diez, y yo me dormí a las diez y cinco.",exEn:"The film started at ten, and I fell asleep at five past ten.",exFr:"Le film a commencé à dix heures, et je me suis endormi à dix heures cinq.",n:"en + pieza（一片）から、「一片に手をつける」が原義。e→ie変化（empiezo）。同義語comenzarは仏commencerと同源。"},
+{w:"terminar",p:"v",en:"to finish, to end",fr:"finir, terminer",ex:"Terminé el libro en una noche; no he dormido nada.",exEn:"I finished the book in one night; I have not slept at all.",exFr:"J'ai terminé le livre en une nuit ; je n'ai pas dormi du tout.",n:"ラテン語terminus（境界・終点）から。英terminal・terminate、仏terminerと同源。"},
+{w:"abrir",p:"v",en:"to open",fr:"ouvrir",ex:"Muchas tiendas cierran a las dos y abren otra vez a las cinco.",exEn:"Many shops close at two and open again at five.",exFr:"Beaucoup de magasins ferment à deux heures et rouvrent à cinq heures.",n:"ラテン語aperire。仏ouvrir、英apertureと同源。過去分詞はabiertoと不規則。スペインの個人商店は昼に閉まることが多い。"},
+{w:"cerrar",p:"v",en:"to close",fr:"fermer",ex:"Cierra la ventana, que entran mosquitos.",exEn:"Close the window, mosquitoes are getting in.",exFr:"Ferme la fenêtre, les moustiques entrent.",n:"俗ラテン語serare（閂をかける）から。e→ie変化（cierro）。仏fermerはfirmare（固める）由来で別系統。Cierraは命令形。"},
+{w:"escribir",p:"v",en:"to write",fr:"écrire",ex:"Cervantes escribió el Quijote y yo escribo la lista de la compra.",exEn:"Cervantes wrote Don Quixote and I write the shopping list.",exFr:"Cervantès a écrit Don Quichotte et moi j'écris la liste de courses.",n:"ラテン語scribere。仏écrire、英scribe・describeと同源。ここでも語頭にe-が付くスペイン語の癖が見える。過去分詞はescrito（不規則）。"},
+{w:"leer",p:"v",en:"to read",fr:"lire",ex:"Leo el periódico en el móvil mientras espero el autobús.",exEn:"I read the newspaper on my phone while I wait for the bus.",exFr:"Je lis le journal sur mon portable en attendant le bus.",n:"ラテン語legere（集める・読む）。仏lire、英legend・lectureと同源。点過去三人称はleyó（iがyに変わる）。"},
+{w:"jugar",p:"v",en:"to play (games, sports)",fr:"jouer",ex:"Los domingos jugamos al fútbol y perdemos con estilo.",exEn:"On Sundays we play football and lose in style.",exFr:"Le dimanche nous jouons au foot et nous perdons avec style.",n:"ラテン語iocari（冗談を言う）から。英joke、仏jouerと同源。u→ueという珍しい変化（juego）。スポーツはjugar a、楽器はtocarと使い分ける。"},
+{w:"dormir",p:"v",en:"to sleep",fr:"dormir",ex:"En verano dormimos la siesta después de comer.",exEn:"In summer we take a nap after lunch.",exFr:"En été nous faisons la sieste après le déjeuner.",n:"ラテン語dormire。仏dormirと同形同源、英dormitoryも同じ。o→ue変化（duermo）。siestaはラテン語sexta hora（第6時＝正午）が語源。"},
+{w:"pagar",p:"v",en:"to pay",fr:"payer",ex:"En España, todos quieren pagar la cuenta a la vez.",exEn:"In Spain, everybody wants to pay the bill at the same time.",exFr:"En Espagne, tout le monde veut payer l'addition en même temps.",n:"ラテン語pacare（なだめる）から。仏payer、英payと同源で、pax（平和）と同じ語根。「支払って相手を鎮める」が原義。スペインでは会計時に奢り合いが起きがち。"},
+{w:"viajar",p:"v",en:"to travel",fr:"voyager",ex:"El año pasado viajé por Perú y subí a Machu Picchu.",exEn:"Last year I travelled around Peru and climbed up to Machu Picchu.",exFr:"L'année dernière j'ai voyagé au Pérou et je suis monté au Machu Picchu.",n:"viaje（旅）の動詞形。ラテン語viaticum（旅の糧）が語源で、仏voyageと同源。viaは「道」。"},
+{w:"aprender",p:"v",en:"to learn",fr:"apprendre",ex:"Aprendí a cocinar paella en Valencia, y ahora no quiero otra.",exEn:"I learned to cook paella in Valencia, and now I do not want any other.",exFr:"J'ai appris à cuisiner la paella à Valence, et maintenant je n'en veux pas d'autre.",n:"ラテン語apprehendere（つかむ）から。仏apprendre、英apprehendと同源。aprender a + 不定詞で「〜することを覚える」。パエリアの本場はバレンシア。"},
+{w:"entender",p:"v",en:"to understand",fr:"comprendre",ex:"No entiendo nada cuando los andaluces hablan rápido.",exEn:"I understand nothing when Andalusians speak fast.",exFr:"Je ne comprends rien quand les Andalous parlent vite.",n:"ラテン語intendere（注意を向ける）から。仏entendre、英intendと同源。フランス語では「聞く」、スペイン語では「理解する」と意味が分かれた。e→ie変化。"},
+{w:"escuchar",p:"v",en:"to listen (to)",fr:"écouter",ex:"Escucho flamenco cuando cocino; la tortilla sale mejor.",exEn:"I listen to flamenco when I cook; the omelette comes out better.",exFr:"J'écoute du flamenco quand je cuisine ; l'omelette est meilleure.",n:"ラテン語auscultare（耳を傾ける）から。仏écouterと同源、英auscultate（聴診する）も同じ。oír（聞こえる）との違いは英hear/listenと同じ。"},
+{w:"mirar",p:"v",en:"to look at",fr:"regarder",ex:"Mira, ese señor lleva un sombrero cordobés.",exEn:"Look, that man is wearing a Cordoban hat.",exFr:"Regarde, ce monsieur porte un chapeau cordouan.",n:"ラテン語mirari（驚いて見る）から。英miracle・mirror、仏miroirと同源。ver（見える）に対し、mirarは意識して見る。¡Mira!は「ねえ・ほら」の呼びかけにもなる。"},
+{w:"la hora",p:"nf",en:"hour, time",fr:"l'heure",ex:"—¿Qué hora es? —La hora de comer, o sea, las tres.",exEn:"What time is it? — Lunchtime, that is, three o'clock.",exFr:"Quelle heure est-il ? — L'heure du déjeuner, c'est-à-dire trois heures.",n:"ラテン語hora。仏heure、英hourと同源。時刻は1時台だけes la una、それ以外はson las dos...と複数形になる。"},
+{w:"el momento",p:"nm",en:"moment",fr:"le moment, l'instant",ex:"Un momento, por favor, que termino el café.",exEn:"One moment, please, I am finishing my coffee.",exFr:"Un instant, s'il vous plaît, je finis mon café.",n:"ラテン語momentum（動き・重み）から。英moment・momentum、仏momentと同源。"},
+{w:"la semana",p:"nf",en:"week",fr:"la semaine",ex:"La Semana Santa de Sevilla atrae a miles de personas.",exEn:"Holy Week in Seville attracts thousands of people.",exFr:"La Semaine sainte de Séville attire des milliers de personnes.",n:"ラテン語septimana（7つ組）から。仏semaineと同源。Semana Santa（聖週間）はスペイン最大の宗教行事で、各地で荘厳な行列が行われる。"},
+{w:"el mes",p:"nm",en:"month",fr:"le mois",ex:"Este mes he gastado demasiado en libros.",exEn:"This month I have spent too much on books.",exFr:"Ce mois-ci j'ai trop dépensé en livres.",n:"ラテン語mensem。仏moisと同源。este mesなど現在を含む期間の出来事には現在完了（he gastado）がよく使われる。"},
+{w:"la tarde",p:"nf",en:"afternoon, evening",fr:"l'après-midi, le soir",ex:"Por la tarde paseamos por el Retiro.",exEn:"In the afternoon we stroll in the Retiro park.",exFr:"L'après-midi nous nous promenons au parc du Retiro.",n:"ラテン語tarde（遅く）から、副詞tarde（遅く）と同じ語。スペインのtardeは夕食前（20時頃）まで続く。Retiroはマドリードの大公園。"},
+{w:"la persona",p:"nf",en:"person",fr:"la personne",ex:"Es la persona más simpática del barrio.",exEn:"She is the nicest person in the neighbourhood.",exFr:"C'est la personne la plus sympathique du quartier.",n:"ラテン語persona（仮面）から。英person、仏personneと同源。男性を指しても常に女性名詞。仏personneの「誰も〜ない」の意味はなく、それはnadieを使う。"},
+{w:"la gente",p:"nf",en:"people",fr:"les gens",ex:"La gente en Madrid cena a las diez.",exEn:"People in Madrid have dinner at ten.",exFr:"Les gens à Madrid dînent à dix heures.",n:"ラテン語gentem（氏族）から。仏gens、英gentleと同源。仏gensは複数扱いだが、スペイン語のgenteは単数扱い（La gente cena）。"},
+{w:"el señor",p:"nm",en:"Mr., gentleman, sir",fr:"monsieur",ex:"El señor García es el portero y lo sabe todo.",exEn:"Mr García is the doorman and he knows everything.",exFr:"Monsieur García est le concierge et il sait tout.",n:"ラテン語seniorem（年長者）から。仏seigneur、英senior・sirと同源。女性はseñora、若い未婚女性はseñorita。"},
+{w:"el hermano",p:"nm",en:"brother",fr:"le frère",ex:"Mi hermano mayor siempre gana al parchís.",exEn:"My older brother always wins at parcheesi.",exFr:"Mon grand frère gagne toujours aux petits chevaux.",n:"ラテン語germanus（同じ血筋の）から。仏frère（frater）とは別系統。los hermanosは「兄弟姉妹」。parchísはスペインの定番すごろく。"},
+{w:"la hermana",p:"nf",en:"sister",fr:"la sœur",ex:"Mi hermana vive en Buenos Aires y ya habla con acento porteño.",exEn:"My sister lives in Buenos Aires and already speaks with a porteño accent.",exFr:"Ma sœur vit à Buenos Aires et parle déjà avec l'accent porteño.",n:"hermanoの女性形。ブエノスアイレスではtúの代わりにvosを使い、llやyを「シャ」と発音する独特の話し方（porteño）が有名。"},
+{w:"el perro",p:"nm",en:"dog",fr:"le chien",ex:"Mi perro entiende español, pero solo la palabra comida.",exEn:"My dog understands Spanish, but only the word food.",exFr:"Mon chien comprend l'espagnol, mais seulement le mot nourriture.",n:"スペイン語独自の語で、ラテン語canisは日常語としては残らなかった（canino＝犬の、として専門語に残る）。仏chienとの違いに注意。"},
+{w:"el gato",p:"nm",en:"cat",fr:"le chat",ex:"El gato duerme dieciséis horas al día. Quiero ser gato.",exEn:"The cat sleeps sixteen hours a day. I want to be a cat.",exFr:"Le chat dort seize heures par jour. Je veux être un chat.",n:"後期ラテン語cattus。仏chat、英catと同源。生粋のマドリード人はgatoというあだ名で呼ばれる（城壁を猫のように登った兵士の伝説から）。"},
+{w:"el pan",p:"nm",en:"bread",fr:"le pain",ex:"En España el pan está en la mesa en todas las comidas.",exEn:"In Spain bread is on the table at every meal.",exFr:"En Espagne le pain est sur la table à chaque repas.",n:"ラテン語panem。仏pain、英pantryと同源。compañero（仲間）はcom + pan、つまり「パンを分け合う人」。英companionも同じ成り立ち。"},
+{w:"el vino",p:"nm",en:"wine",fr:"le vin",ex:"El vino de La Rioja es famoso en todo el mundo.",exEn:"Wine from La Rioja is famous all over the world.",exFr:"Le vin de la Rioja est célèbre dans le monde entier.",n:"ラテン語vinum。仏vin、英wine・vineと同源。tinto（赤）、blanco（白）、rosado（ロゼ）。赤ワインはrojoではなくtintoと言う。"},
+{w:"la carne",p:"nf",en:"meat",fr:"la viande",ex:"En Argentina la carne a la parrilla es casi una religión.",exEn:"In Argentina grilled meat is almost a religion.",exFr:"En Argentine la viande grillée est presque une religion.",n:"ラテン語carnem（肉）。仏chair、英carnivoreと同源。carnaval（謝肉祭）も同じ語根で、四旬節の肉断ちの前に行う祭りを指す。"},
+{w:"el pescado",p:"nm",en:"fish (as food)",fr:"le poisson",ex:"En Galicia comí el mejor pescado de mi vida.",exEn:"In Galicia I ate the best fish of my life.",exFr:"En Galice j'ai mangé le meilleur poisson de ma vie.",n:"pescar（釣る）の過去分詞から。ラテン語piscis、仏poissonと同源。泳いでいる魚はpez、食材の魚はpescadoと区別する。"},
+{w:"el café",p:"nm",en:"coffee, café",fr:"le café",ex:"Un café solo, un cortado y un café con leche, por favor.",exEn:"An espresso, a cortado and a coffee with milk, please.",exFr:"Un café noir, un cortado et un café au lait, s'il vous plaît.",n:"トルコ語kahveがイタリア語経由で入った語で、仏caféと同じ。solo＝ブラック、cortado＝少しミルク入り、con leche＝ミルクたっぷり。"},
+{w:"el tren",p:"nm",en:"train",fr:"le train",ex:"Cogí el tren de alta velocidad y llegué a Barcelona en menos de tres horas.",exEn:"I took the high-speed train and got to Barcelona in under three hours.",exFr:"J'ai pris le train à grande vitesse et je suis arrivé à Barcelone en moins de trois heures.",n:"仏trainからの借用で、ラテン語trahere（引く）が語源。英tractorと同源。coger（乗る）はスペインでは普通だが、中南米の一部では卑語になるのでtomarを使う。"},
+{w:"el avión",p:"nm",en:"plane, airplane",fr:"l'avion",ex:"El avión salió tarde, pero llegó a tiempo. ¡Milagro!",exEn:"The plane left late, but arrived on time. A miracle!",exFr:"L'avion est parti en retard, mais il est arrivé à l'heure. Miracle !",n:"仏avionからの借用。ラテン語avis（鳥）が語源で、英aviationと同源。-iónで終わる名詞はほぼ女性名詞だが、aviónは男性名詞。"},
+{w:"la estación",p:"nf",en:"station, season",fr:"la gare, la saison",ex:"La estación de Atocha tiene un jardín tropical dentro.",exEn:"Atocha station has a tropical garden inside.",exFr:"La gare d'Atocha a un jardin tropical à l'intérieur.",n:"ラテン語stationem（留まる所）から。英station、仏station・saisonと同源。「駅」と「季節」の両方を意味する。アトーチャはマドリードの主要駅。"},
+{w:"la habitación",p:"nf",en:"room, bedroom",fr:"la chambre, la pièce",ex:"La habitación del hotel tiene vistas a la Alhambra.",exEn:"The hotel room has a view of the Alhambra.",exFr:"La chambre de l'hôtel a vue sur l'Alhambra.",n:"habitar（住む）の派生語。英inhabit・habitatと同源。-ciónで終わる名詞は女性名詞で、英・仏の-tionにぴったり対応する。"},
+{w:"la cama",p:"nf",en:"bed",fr:"le lit",ex:"Los domingos no salgo de la cama antes de las doce.",exEn:"On Sundays I do not get out of bed before twelve.",exFr:"Le dimanche je ne sors pas du lit avant midi.",n:"後期ラテン語cama（寝床）から。仏lit（lectus）とは別語源。hacer la camaで「ベッドを整える」。"},
+{w:"la cocina",p:"nf",en:"kitchen, cuisine",fr:"la cuisine",ex:"La cocina peruana mezcla sabores de Japón, China y los Andes.",exEn:"Peruvian cuisine mixes flavours from Japan, China and the Andes.",exFr:"La cuisine péruvienne mélange des saveurs du Japon, de Chine et des Andes.",n:"ラテン語coquina（coquere「料理する」から）。仏cuisine、英kitchen・cookと同源。「台所」と「料理」の両方を指す。ペルーには日系移民から生まれたnikkei料理がある。"},
+{w:"la tienda",p:"nf",en:"shop, store, tent",fr:"le magasin, la tente",ex:"La tienda de la esquina abre incluso los domingos.",exEn:"The corner shop opens even on Sundays.",exFr:"Le magasin du coin ouvre même le dimanche.",n:"ラテン語tendere（張る）から、もとは「テント」。英tent、仏tenteと同源。今もtienda de campañaで「テント」の意味になる。"},
+{w:"el mercado",p:"nm",en:"market",fr:"le marché",ex:"En el mercado de la Boquería hay zumos de todos los colores.",exEn:"At La Boqueria market there are juices of every colour.",exFr:"Au marché de la Boqueria il y a des jus de toutes les couleurs.",n:"ラテン語mercatus。仏marché、英market・merchantと同源。ボケリア市場はバルセロナの名所。"},
+{w:"la playa",p:"nf",en:"beach",fr:"la plage",ex:"En agosto media España está en la playa.",exEn:"In August half of Spain is at the beach.",exFr:"En août la moitié de l'Espagne est à la plage.",n:"後期ラテン語plagia（岸）から。仏plageと同源。ラテン語のpl-は普通ll-になる（plenum>lleno）が、playaは変化しなかった例外。"},
+{w:"el mar",p:"nm",en:"sea",fr:"la mer",ex:"Desde Tarifa se ve África al otro lado del mar.",exEn:"From Tarifa you can see Africa on the other side of the sea.",exFr:"De Tarifa on voit l'Afrique de l'autre côté de la mer.",n:"ラテン語mare。仏mer、英marineと同源。普通は男性名詞だが、詩や漁師の言葉ではla marと女性名詞でも使う。タリファはヨーロッパ大陸の最南端の町。"},
+{w:"el sol",p:"nm",en:"sun",fr:"le soleil",ex:"En Sevilla el sol de julio no es broma.",exEn:"In Seville the July sun is no joke.",exFr:"À Séville le soleil de juillet, ce n'est pas une plaisanterie.",n:"ラテン語solem。英solarと同源。仏soleilは縮小形soliculus（小さな太陽）から。hace solで「日が照っている」。"},
+{w:"la cabeza",p:"nf",en:"head",fr:"la tête",ex:"Me duele la cabeza; ayer bebí demasiado cava.",exEn:"I have a headache; yesterday I drank too much cava.",exFr:"J'ai mal à la tête ; hier j'ai bu trop de cava.",n:"ラテン語caput（頭）の派生形から。英capital・captain、仏chefと同源。仏têteはtesta（壺）由来で別系統。痛みはme duele + 部位で表す。cavaはカタルーニャの発泡ワイン。"},
+{w:"el corazón",p:"nm",en:"heart",fr:"le cœur",ex:"Tengo el corazón dividido entre el Real Madrid y el Barça.",exEn:"My heart is divided between Real Madrid and Barça.",exFr:"J'ai le cœur partagé entre le Real Madrid et le Barça.",n:"ラテン語cor（心臓）に拡大語尾が付いた形。仏cœur、英cordial・courageと同源。"},
+{w:"la palabra",p:"nf",en:"word",fr:"le mot, la parole",ex:"Mi palabra favorita en español es sobremesa.",exEn:"My favourite word in Spanish is sobremesa.",exFr:"Mon mot préféré en espagnol est sobremesa.",n:"ラテン語parabola（たとえ話）から。仏parole、英parableと同源。sobremesaは食後も席を立たずに続けるおしゃべりの時間で、他言語に訳しにくい語として有名。"},
+{w:"el idioma",p:"nm",en:"language",fr:"la langue",ex:"En Suiza hablan cuatro idiomas; yo, con uno ya tengo problemas.",exEn:"In Switzerland they speak four languages; I already have trouble with one.",exFr:"En Suisse on parle quatre langues ; moi, j'ai déjà du mal avec une.",n:"ギリシャ語idioma（特有の言い方）から。英idiomと同源。ギリシャ語由来の-maで終わる語は男性名詞（el idioma, el problema, el tema）。"},
+{w:"la pregunta",p:"nf",en:"question",fr:"la question",ex:"¿Puedo hacer una pregunta tonta?",exEn:"Can I ask a silly question?",exFr:"Je peux poser une question bête ?",n:"preguntar（尋ねる）の名詞形で、ラテン語percontari（探る）から。「質問する」はhacer una pregunta。"},
+{w:"la historia",p:"nf",en:"history, story",fr:"l'histoire",ex:"Mi abuelo cuenta la misma historia cada Navidad.",exEn:"My grandfather tells the same story every Christmas.",exFr:"Mon grand-père raconte la même histoire à chaque Noël.",n:"ギリシャ語historia（探究）から。仏histoireと同じく「歴史」と「物語」の両方を表す。英historyとstoryも同じ語から分かれた。"},
+{w:"la música",p:"nf",en:"music",fr:"la musique",ex:"En Cuba la música sale de todas las ventanas.",exEn:"In Cuba music comes out of every window.",exFr:"À Cuba la musique sort de toutes les fenêtres.",n:"ギリシャ語mousike（ミューズたちの技）から。仏musique、英musicと同源。"},
+{w:"la fiesta",p:"nf",en:"party, festival",fr:"la fête",ex:"La fiesta de San Fermín dura una semana entera.",exEn:"The San Fermín festival lasts a whole week.",exFr:"La fête de San Fermín dure une semaine entière.",n:"ラテン語festa。仏fête（sが消えて^が付いた形）、英feast・festivalと同源。サン・フェルミン祭はパンプローナの牛追い祭り。"},
+{w:"el problema",p:"nm",en:"problem",fr:"le problème",ex:"No hay problema: mañana lo hacemos. Bueno, pasado mañana.",exEn:"No problem: we will do it tomorrow. Well, the day after tomorrow.",exFr:"Pas de problème : on le fait demain. Enfin, après-demain.",n:"ギリシャ語由来で、-aで終わるのに男性名詞。仏problème、英problemと同源。pasado mañanaは「明後日」。"},
+{w:"el lugar",p:"nm",en:"place",fr:"le lieu, l'endroit",ex:"Este es mi lugar favorito para ver la puesta de sol.",exEn:"This is my favourite place to watch the sunset.",exFr:"C'est mon endroit préféré pour regarder le coucher du soleil.",n:"ラテン語localis（場所の）から。英local・location、仏lieuと同源。en lugar deで「〜の代わりに」。"},
+{w:"alto",p:"adj",en:"tall, high, loud",fr:"grand, haut",ex:"Mi hermano es tan alto que siempre le preguntan qué tiempo hace allá arriba.",exEn:"My brother is so tall that people always ask him what the weather is like up there.",exFr:"Mon frère est si grand qu'on lui demande toujours quel temps il fait là-haut.",n:"ラテン語altum。仏haut、英altitudeと同源。「背が高い」「高い」「声が大きい（en voz alta）」と幅広く使う。tan...queで「とても〜なので…」。"},
+{w:"bajo",p:"adj",en:"short, low, quiet",fr:"petit, bas",ex:"Habla en voz baja, que el bebé duerme.",exEn:"Speak quietly, the baby is sleeping.",exFr:"Parle à voix basse, le bébé dort.",n:"後期ラテン語bassus。仏bas、英bass（低音）・baseと同源。前置詞bajo（〜の下で）の用法もある（bajo la lluvia＝雨の中）。"},
+{w:"largo",p:"adj",en:"long",fr:"long",ex:"La cola del museo del Prado era larguísima.",exEn:"The queue at the Prado museum was extremely long.",exFr:"La file d'attente du musée du Prado était interminable.",n:"ラテン語largus（豊富な）から。英large（大きい）と同源だが、スペイン語では「長い」。形は似ても意味がずれる偽の友（falso amigo）の代表例。-ísimoは「非常に〜」を作る接尾辞。"},
+{w:"joven",p:"adj",en:"young",fr:"jeune",ex:"Mi abuela dice que es joven de espíritu, y es verdad.",exEn:"My grandmother says she is young at heart, and it is true.",exFr:"Ma grand-mère dit qu'elle est jeune d'esprit, et c'est vrai.",n:"ラテン語iuvenem。仏jeune、英juvenile・youngと同源。複数形はjóvenes（強勢の位置を保つためアクセント記号が付く）。"},
+{w:"bonito",p:"adj",en:"pretty, nice",fr:"joli, beau",ex:"¡Qué pueblo más bonito! Parece de postal.",exEn:"What a pretty village! It looks like a postcard.",exFr:"Quel joli village ! On dirait une carte postale.",n:"bueno（良い）に縮小辞-itoが付いた形に由来する。魚のbonito（カツオ）と同じ綴り。¡Qué + 名詞 + más + 形容詞!は感嘆の定番構文。"},
+{w:"caro",p:"adj",en:"expensive, dear",fr:"cher",ex:"El jamón ibérico es caro, pero vale cada euro.",exEn:"Iberian ham is expensive, but it is worth every euro.",exFr:"Le jambon ibérique est cher, mais il vaut chaque euro.",n:"ラテン語carum（愛しい・高価な）。仏cherと同じく「高価な」と「親愛なる」の両義がある。英charityと同源。"},
+{w:"barato",p:"adj",en:"cheap",fr:"bon marché, pas cher",ex:"El menú del día es barato: primer plato, segundo, postre y bebida.",exEn:"The set lunch menu is cheap: starter, main course, dessert and a drink.",exFr:"Le menu du jour est bon marché : entrée, plat, dessert et boisson.",n:"古スペイン語baratar（取引する）に由来するとされる。menú del díaはスペインの平日ランチの定番で、手頃な値段でコースが食べられる。"},
+{w:"fácil",p:"adj",en:"easy",fr:"facile",ex:"El español es fácil de leer, pero difícil de hablar rápido.",exEn:"Spanish is easy to read, but hard to speak fast.",exFr:"L'espagnol est facile à lire, mais difficile à parler vite.",n:"ラテン語facilis（facere「する」から）。仏facile、英facilityと同源。「〜するのが簡単」はfácil de + 不定詞。"},
+{w:"difícil",p:"adj",en:"difficult, hard",fr:"difficile",ex:"Lo más difícil del español es el subjuntivo, dicen todos.",exEn:"The hardest thing about Spanish is the subjunctive, everybody says.",exFr:"Le plus difficile en espagnol, c'est le subjonctif, disent-ils tous.",n:"dis-（否定）+ facilis。仏difficile、英difficultと同源。lo más + 形容詞で「最も〜なこと」。"},
+{w:"feliz",p:"adj",en:"happy",fr:"heureux",ex:"Con un café y un churro, soy feliz.",exEn:"With a coffee and a churro, I am happy.",exFr:"Avec un café et un churro, je suis heureux.",n:"ラテン語felicem。英felicityと同源。性による変化がなく、複数形はfelices（z→c）。¡Feliz cumpleaños!は「誕生日おめでとう」。"},
+{w:"cansado",p:"adj",en:"tired",fr:"fatigué",ex:"Estoy cansado porque he trabajado diez horas.",exEn:"I am tired because I have worked ten hours.",exFr:"Je suis fatigué parce que j'ai travaillé dix heures.",n:"cansar（疲れさせる）の過去分詞から。一時的な状態なのでestarと使う。serと使うと「（人・物が）うんざりさせる」の意味になる。"},
+{w:"mejor",p:"adj/adv",en:"better, best",fr:"meilleur, mieux",ex:"Mi tortilla es mejor que la de mi suegra, pero no se lo digas.",exEn:"My omelette is better than my mother-in-law's, but do not tell her.",exFr:"Mon omelette est meilleure que celle de ma belle-mère, mais ne le lui dis pas.",n:"ラテン語meliorem。仏meilleur、英ameliorateと同源。buenoの比較級で、普通más buenoとは言わない。no se lo digasは否定命令で、接続法を使う（4級範囲）。"},
+{w:"peor",p:"adj/adv",en:"worse, worst",fr:"pire",ex:"Lo peor del verano en Madrid son las noches sin aire.",exEn:"The worst thing about summer in Madrid is the airless nights.",exFr:"Le pire de l'été à Madrid, ce sont les nuits sans air.",n:"ラテン語peiorem。仏pire、英pejorativeと同源。maloの比較級。"},
+{w:"primero",p:"adj/adv",en:"first",fr:"premier, d'abord",ex:"Primero el trabajo, después la siesta. Bueno, primero la siesta.",exEn:"First work, then the siesta. Well, first the siesta.",exFr:"D'abord le travail, ensuite la sieste. Enfin, d'abord la sieste.",n:"ラテン語primarium。仏premier、英primaryと同源。男性単数名詞の前ではprimerになる（el primer día）。"},
+{w:"último",p:"adj",en:"last",fr:"dernier",ex:"Siempre me como el último churro, aunque digo que no quiero.",exEn:"I always eat the last churro, even though I say I do not want it.",exFr:"Je mange toujours le dernier churro, même si je dis que je n'en veux pas.",n:"ラテン語ultimus（最も遠い）。英ultimateと同源。仏dernierとは別語源。me comoのmeは「平らげる」ニュアンスを添える用法。"},
+{w:"qué",p:"pron",en:"what",fr:"que, quoi, quel",ex:"—¿Qué es eso? —Turrón. ¿Qué pasa, no lo conoces?",exEn:"What is that? — Turrón. What, you do not know it?",exFr:"Qu'est-ce que c'est ? — Du touron. Quoi, tu ne connais pas ?",n:"疑問詞はアクセント記号付きのqué、記号なしのqueは関係詞・接続詞。¡Qué + 形容詞!で感嘆文になる。turrónはクリスマスに食べるアーモンド菓子。"},
+{w:"ya",p:"adv",en:"already, now",fr:"déjà",ex:"—¿Ya has comido? —Ya, ya... bueno, todavía no.",exEn:"Have you already eaten? — Yes, yes... well, not yet.",exFr:"Tu as déjà mangé ? — Oui, oui... enfin, pas encore.",n:"ラテン語iamから。仏déjàのjàと同源。ya noで「もう〜ない」。会話のYaは「わかった・そうだね」の相づちにもなる。"},
+{w:"todavía",p:"adv",en:"still, yet",fr:"encore, toujours",ex:"Son las once y todavía no hemos cenado. Normal en España.",exEn:"It is eleven and we still have not had dinner. Normal in Spain.",exFr:"Il est onze heures et nous n'avons toujours pas dîné. Normal en Espagne.",n:"toda + vía（すべての道で）から「常に・依然として」の意味になった。todavía noで「まだ〜ない」。同義語はaún。"},
+{w:"después",p:"adv",en:"after, afterwards",fr:"après, ensuite",ex:"Después de comer, sobremesa; después de la sobremesa, siesta.",exEn:"After lunch, a long chat at the table; after the chat, a nap.",exFr:"Après le déjeuner, discussion à table ; après la discussion, sieste.",n:"de + ex + post（後に）の合成語。英post-と同源。después de + 名詞・不定詞で「〜の後で」。"},
+{w:"antes",p:"adv",en:"before",fr:"avant",ex:"Antes de ir a México, aprendí la frase más útil: ¿pica mucho?",exEn:"Before going to Mexico, I learned the most useful phrase: is it very spicy?",exFr:"Avant d'aller au Mexique, j'ai appris la phrase la plus utile : ça pique beaucoup ?",n:"ラテン語ante。英ante-、仏avant（ab + ante）と同源。antes de + 不定詞で「〜する前に」。picarは「刺す」から「辛い」の意味にもなる。"},
+{w:"temprano",p:"adv",en:"early",fr:"tôt",ex:"En España, cenar a las ocho es cenar temprano.",exEn:"In Spain, having dinner at eight means having dinner early.",exFr:"En Espagne, dîner à huit heures, c'est dîner tôt.",n:"ラテン語temporanus（tempus「時間」から）。tiempoと同じ語根。反対語はtarde（遅く）。"},
+{w:"cerca",p:"adv",en:"near, close",fr:"près",ex:"Vivo cerca de la playa, pero solo voy en agosto.",exEn:"I live near the beach, but I only go in August.",exFr:"J'habite près de la plage, mais je n'y vais qu'en août.",n:"ラテン語circa（周りに）から。英circle・circaと同源。cerca de + 名詞で「〜の近くに」。"},
+{w:"lejos",p:"adv",en:"far",fr:"loin",ex:"La Patagonia está lejos de todo, y por eso es tan bonita.",exEn:"Patagonia is far from everything, and that is why it is so beautiful.",exFr:"La Patagonie est loin de tout, et c'est pour ça qu'elle est si belle.",n:"ラテン語laxius（より緩く）から。仏loin（longe）とは別語源。lejos de + 名詞で「〜から遠く」。"},
+{w:"algo",p:"pron",en:"something",fr:"quelque chose",ex:"¿Tomamos algo? En España, eso significa ir al bar.",exEn:"Shall we have something? In Spain, that means going to the bar.",exFr:"On prend quelque chose ? En Espagne, ça veut dire aller au bar.",n:"ラテン語aliquod（何か）から。¿Tomamos algo?は「一杯どう？」の定番の誘い文句。algo + 形容詞で「少し〜」（algo cansado）。"},
+{w:"nada",p:"pron",en:"nothing, anything",fr:"rien",ex:"No he entendido nada, pero he dicho que sí a todo.",exEn:"I have not understood anything, but I have said yes to everything.",exFr:"Je n'ai rien compris, mais j'ai dit oui à tout.",n:"ラテン語res nata（生まれたもの）のnataが残った形で、原義は肯定的。仏rien（res「もの」）も同じく「もの」から「無」に反転した。De nadaは「どういたしまして」。"},
+{w:"nadie",p:"pron",en:"nobody, anybody",fr:"personne",ex:"Nadie sabe la receta de la abuela, ni siquiera la abuela.",exEn:"Nobody knows grandma's recipe, not even grandma.",exFr:"Personne ne connaît la recette de grand-mère, pas même grand-mère.",n:"ラテン語natus（生まれた者）から。動詞の前ならnoは不要（Nadie viene）、後ろならNo viene nadie。仏personneと用法がそっくり。"},
+{w:"cuando",p:"conj",en:"when",fr:"quand",ex:"Cuando era niño, pensaba que los Reyes Magos traían todo.",exEn:"When I was a child, I thought the Three Wise Men brought everything.",exFr:"Quand j'étais enfant, je pensais que les Rois mages apportaient tout.",n:"ラテン語quando。仏quandと同源。疑問詞はcuándo（記号付き）。スペインの子どもは1月6日に東方の三賢王（Reyes Magos）からプレゼントをもらう。era・pensabaは線過去。"},
+{w:"si",p:"conj",en:"if",fr:"si",ex:"Si llueve, vamos al museo; si no, a la playa.",exEn:"If it rains, we will go to the museum; if not, to the beach.",exFr:"S'il pleut, on va au musée ; sinon, à la plage.",n:"ラテン語si。仏siと同形同源。アクセント付きのsí（はい）と区別する。現実的な条件はsi + 直説法現在で表す。"},
+{w:"dónde",p:"adv",en:"where",fr:"où",ex:"¿Dónde está el baño? Es la pregunta más importante del viaje.",exEn:"Where is the bathroom? It is the most important question of the trip.",exFr:"Où sont les toilettes ? C'est la question la plus importante du voyage.",n:"de + onde（ラテン語unde「どこから」）の合成語。¿Adónde?は「どこへ」、¿De dónde?は「どこから」。記号なしのdondeは関係副詞。"},
+{w:"hasta",p:"prep",en:"until, up to",fr:"jusqu'à",ex:"Trabajo hasta las siete y después... ¡hasta mañana, oficina!",exEn:"I work until seven and then... see you tomorrow, office!",exFr:"Je travaille jusqu'à sept heures et après... à demain, le bureau !",n:"アラビア語hattaに由来するとされる。スペイン語にはアラビア語起源の語が数千語あり、イベリア半島の歴史を物語る。hasta luego（またね）、hasta mañana（また明日）。"}
+]},
+  {id:3, title:"Nivel 3", range:"201–300", words:[
+{w:"levantarse",p:"v refl",en:"to get up",fr:"se lever",ex:"Los domingos me levanto a las once y desayuno a las doce.",exEn:"On Sundays I get up at eleven and have breakfast at twelve.",exFr:"Le dimanche je me lève à onze heures et je prends le petit-déjeuner à midi.",n:"levantar（持ち上げる）＋再帰代名詞seで「自分を持ち上げる」→「起きる」。仏se leverと発想も語源（ラテン語levare）も同じ。再帰代名詞は主語に合わせてme/te/se/nos/os/seと変わる。"},
+{w:"acostarse",p:"v refl",en:"to go to bed",fr:"se coucher",ex:"Mi abuela se acuesta a las nueve y se levanta antes que el sol.",exEn:"My grandmother goes to bed at nine and gets up before the sun.",exFr:"Ma grand-mère se couche à neuf heures et se lève avant le soleil.",n:"costado（脇腹）から、「脇を下にして横になる」が原義。仏se coucher（collocare由来）とは別語源。o→ue変化（me acuesto）。"},
+{w:"ducharse",p:"v refl",en:"to take a shower",fr:"se doucher",ex:"En verano me ducho dos veces al día, o tres en Sevilla.",exEn:"In summer I shower twice a day, or three times in Seville.",exFr:"En été je me douche deux fois par jour, ou trois à Séville.",n:"ducha（シャワー）は仏doucheからの借用で、さらにラテン語ductus（導管）に遡り、英duct・conductと同源。〜veces al díaで「1日に〜回」。"},
+{w:"sentarse",p:"v refl",en:"to sit down",fr:"s'asseoir",ex:"Siéntate, que la paella ya está lista.",exEn:"Sit down, the paella is ready now.",exFr:"Assieds-toi, la paella est prête.",n:"ラテン語sedere（座る）の派生形から。英sedentary・sessionと同源。e→ie変化。肯定命令では代名詞が後ろに付く（siéntate）。me sientoは「座る」とsentir「感じる」で同形なので文脈で見分ける。"},
+{w:"quedarse",p:"v refl",en:"to stay, to remain",fr:"rester",ex:"Esta noche me quedo en casa: hay partido y hay tortilla.",exEn:"Tonight I am staying at home: there is a match and there is tortilla.",exFr:"Ce soir je reste à la maison : il y a un match et il y a de la tortilla.",n:"ラテン語quietare（静める）から。英quiet・quitと同源。仏resterとは別語源。seのないquedarは「待ち合わせる」の意味にもなる（¿Quedamos a las siete?）。"},
+{w:"preferir",p:"v",en:"to prefer",fr:"préférer",ex:"—¿Prefieres playa o montaña? —Prefiero la siesta.",exEn:"Do you prefer the beach or the mountains? — I prefer the siesta.",exFr:"Tu préfères la plage ou la montagne ? — Je préfère la sieste.",n:"ラテン語praeferre（前に置く）から。仏préférer、英preferと同源。e→ie変化（prefiero）。"},
+{w:"recordar",p:"v",en:"to remember, to remind",fr:"se souvenir de, rappeler",ex:"No recuerdo dónde aparqué el coche. Otra vez.",exEn:"I do not remember where I parked the car. Again.",exFr:"Je ne me souviens pas où j'ai garé la voiture. Encore.",n:"re（再び）＋cor（心）から、「心に呼び戻す」が原義。英record・cordialと同源。o→ue変化（recuerdo）。"},
+{w:"olvidar",p:"v",en:"to forget",fr:"oublier",ex:"Siempre olvido el cumpleaños de mi hermano, pero él nunca olvida el mío.",exEn:"I always forget my brother's birthday, but he never forgets mine.",exFr:"J'oublie toujours l'anniversaire de mon frère, mais lui n'oublie jamais le mien.",n:"ラテン語oblivisci（忘れる）から。仏oublier、英oblivionと同源。olvidarse de...という再帰の形もよく使う（Me olvidé de las llaves）。"},
+{w:"perder",p:"v",en:"to lose, to miss",fr:"perdre, rater",ex:"Perdí el tren por un minuto y gané una hora de café.",exEn:"I missed the train by a minute and gained an hour of coffee.",exFr:"J'ai raté le train d'une minute et j'ai gagné une heure de café.",n:"ラテン語perdere。仏perdre、英perditionと同源。e→ie変化（pierdo）。電車に「乗り遅れる」もperderで表す。"},
+{w:"ganar",p:"v",en:"to win, to earn",fr:"gagner",ex:"Si gano la lotería de Navidad, compraré una casa en Mallorca.",exEn:"If I win the Christmas lottery, I will buy a house in Mallorca.",exFr:"Si je gagne à la loterie de Noël, j'achèterai une maison à Majorque.",n:"ゲルマン語に由来するとされ、仏gagnerと同源。「勝つ」と「稼ぐ」の両方。compraréは未来形で、不定詞に-é, -ás, -á…を付けて作る。クリスマス宝くじ（El Gordo）はスペインの国民的行事。"},
+{w:"cambiar",p:"v",en:"to change",fr:"changer",ex:"En Buenos Aires el tiempo cambia cuatro veces en un día.",exEn:"In Buenos Aires the weather changes four times in one day.",exFr:"À Buenos Aires le temps change quatre fois en une journée.",n:"後期ラテン語cambiare（交換する）から。仏changer、英changeと同源。両替もcambiar dineroと言う。"},
+{w:"ayudar",p:"v",en:"to help",fr:"aider",ex:"¿Me ayudas con la maleta? Pesa como un burro.",exEn:"Can you help me with the suitcase? It weighs as much as a donkey.",exFr:"Tu m'aides avec la valise ? Elle pèse comme un âne.",n:"ラテン語adiutare。仏aider、英aidと同源。¡Ayuda!は「助けて！」。"},
+{w:"usar",p:"v",en:"to use",fr:"utiliser",ex:"Mi abuelo usa el móvil solo para llamar... y para ver fútbol.",exEn:"My grandfather uses his mobile only to make calls... and to watch football.",exFr:"Mon grand-père utilise son portable seulement pour appeler... et pour regarder le foot.",n:"ラテン語usus（使用）から。英useと同源。仏userは「すり減らす」の意味で、「使う」は普通utiliserなので注意。"},
+{w:"enseñar",p:"v",en:"to teach, to show",fr:"enseigner, montrer",ex:"Mi amiga me enseña a bailar salsa, pero mis pies no aprenden.",exEn:"My friend is teaching me to dance salsa, but my feet do not learn.",exFr:"Mon amie m'apprend à danser la salsa, mais mes pieds n'apprennent pas.",n:"ラテン語insignare（しるしを付ける）から。仏enseigner、英signと同源。「教える」と「見せる」の両方の意味。enseñar a + 不定詞で「〜の仕方を教える」。"},
+{w:"preparar",p:"v",en:"to prepare, to make",fr:"préparer",ex:"Mañana prepararé gazpacho, porque hará mucho calor.",exEn:"Tomorrow I will make gazpacho, because it will be very hot.",exFr:"Demain je préparerai du gaspacho, parce qu'il fera très chaud.",n:"ラテン語praeparare。英・仏と同形同源。prepararéは規則的な未来形、haráはhacerの不規則な未来形（har-）。ガスパチョはアンダルシアの冷製トマトスープ。"},
+{w:"cocinar",p:"v",en:"to cook",fr:"cuisiner",ex:"Mi padre cocina fatal, pero nadie se lo dice.",exEn:"My father cooks terribly, but nobody tells him.",exFr:"Mon père cuisine très mal, mais personne ne le lui dit.",n:"cocina（台所・料理）の動詞形。ラテン語coquere、英cookと同源。fatalは口語で「ひどく下手に」。se lo diceのseは、間接目的語leがloの前でseに変わった形。"},
+{w:"limpiar",p:"v",en:"to clean",fr:"nettoyer",ex:"Los sábados limpiamos la casa con música a todo volumen.",exEn:"On Saturdays we clean the house with music at full volume.",exFr:"Le samedi nous nettoyons la maison avec la musique à fond.",n:"limpio（きれいな）の動詞形。ラテン語limpidus（澄んだ）から、英limpidと同源。"},
+{w:"lavar",p:"v",en:"to wash",fr:"laver",ex:"Lávate las manos antes de comer, dice mi madre. Tengo cuarenta años.",exEn:"Wash your hands before eating, my mother says. I am forty years old.",exFr:"Lave-toi les mains avant de manger, dit ma mère. J'ai quarante ans.",n:"ラテン語lavare。仏laver、英lavatory・laundryと同源。体の部位を洗うときは再帰動詞＋定冠詞で表し（lavarse las manos）、mis manosとは言わない。"},
+{w:"bailar",p:"v",en:"to dance",fr:"danser",ex:"En la boda bailamos hasta las seis de la mañana.",exEn:"At the wedding we danced until six in the morning.",exFr:"Au mariage nous avons dansé jusqu'à six heures du matin.",n:"後期ラテン語ballare（踊る）から。英ball（舞踏会）・balletと同源で、仏danserとは別系統。スペインの結婚式は明け方まで続くことが多い。"},
+{w:"cantar",p:"v",en:"to sing",fr:"chanter",ex:"En el karaoke mi jefe canta boleros con los ojos cerrados.",exEn:"At karaoke my boss sings boleros with his eyes closed.",exFr:"Au karaoké mon patron chante des boléros les yeux fermés.",n:"ラテン語cantare。仏chanter、英chant・cantataと同源。ボレロはラテンアメリカの甘いラブバラード。"},
+{w:"correr",p:"v",en:"to run",fr:"courir",ex:"Corrí para coger el autobús y el conductor me saludó... y se fue.",exEn:"I ran to catch the bus and the driver waved at me... and left.",exFr:"J'ai couru pour attraper le bus et le chauffeur m'a salué... et il est parti.",n:"ラテン語currere。仏courir、英current・courseと同源。se fueはirse（立ち去る）の点過去。"},
+{w:"caminar",p:"v",en:"to walk",fr:"marcher",ex:"En Madrid se camina mucho: todo está cerca, o eso dicen.",exEn:"In Madrid people walk a lot: everything is close, or so they say.",exFr:"À Madrid on marche beaucoup : tout est près, ou c'est ce qu'on dit.",n:"camino（道）の動詞形で、ケルト語起源の後期ラテン語camminusから。スペインでは同義のandarもよく使う。o eso dicenは「そういう話だ」。"},
+{w:"subir",p:"v",en:"to go up, to climb, to get on",fr:"monter",ex:"Subimos al Teide y desde arriba vimos todas las islas.",exEn:"We climbed Mount Teide and from the top we saw all the islands.",exFr:"Nous sommes montés sur le Teide et d'en haut nous avons vu toutes les îles.",n:"ラテン語subire（下から近づく）から。「上る」「（乗り物に）乗る」「値上がりする」と幅広い。テイデ山はカナリア諸島にあるスペイン最高峰。"},
+{w:"bajar",p:"v",en:"to go down, to get off, to lower",fr:"descendre, baisser",ex:"Baja el volumen, que los vecinos ya han llamado dos veces.",exEn:"Turn the volume down, the neighbours have already called twice.",exFr:"Baisse le volume, les voisins ont déjà appelé deux fois.",n:"形容詞bajo（低い）の動詞形で、subirの反対。「降りる」「下げる」「値下がりする」。"},
+{w:"tomar",p:"v",en:"to take, to have (food, drink)",fr:"prendre",ex:"—¿Qué vas a tomar? —Un vermú, que es domingo.",exEn:"What are you going to have? — A vermouth, it is Sunday.",exFr:"Qu'est-ce que tu vas prendre ? — Un vermouth, c'est dimanche.",n:"語源ははっきりしない。仏prendreと同じく「取る」「飲食する」「（乗り物に）乗る」に使う。スペインには日曜の昼前にベルモットを飲む習慣（la hora del vermú）がある。"},
+{w:"traer",p:"v",en:"to bring",fr:"apporter",ex:"Cuando vengas, trae pan, que yo pongo el vino.",exEn:"When you come, bring bread, I will provide the wine.",exFr:"Quand tu viendras, apporte du pain, moi je m'occupe du vin.",n:"ラテン語trahere（引く）から。英tractor・attractと同源。一人称現在はtraigo。cuando + 接続法（vengas）で未来のことを表すのは4級頻出。"},
+{w:"oír",p:"v",en:"to hear",fr:"entendre",ex:"¿Oyes eso? Son las campanas de la catedral.",exEn:"Do you hear that? It is the cathedral bells.",exFr:"Tu entends ça ? Ce sont les cloches de la cathédrale.",n:"ラテン語audire。英audio・audienceと同源。活用は不規則（oigo, oyes, oye）。¡Oye!は「ねえ・ちょっと」の呼びかけ。"},
+{w:"sentir",p:"v",en:"to feel, to be sorry",fr:"sentir, regretter",ex:"Lo siento, he llegado tarde porque el perro se comió mis llaves.",exEn:"I am sorry, I am late because the dog ate my keys.",exFr:"Désolé, je suis en retard parce que le chien a mangé mes clés.",n:"ラテン語sentire。仏sentir、英sense・sentimentと同源。e→ie変化。Lo siento（それを感じる）で「ごめんなさい」。sentirse + 形容詞で「〜な気分だ」。"},
+{w:"contar",p:"v",en:"to count, to tell",fr:"compter, raconter",ex:"Mi abuelo cuenta chistes malos, pero los cuenta muy bien.",exEn:"My grandfather tells bad jokes, but he tells them very well.",exFr:"Mon grand-père raconte de mauvaises blagues, mais il les raconte très bien.",n:"ラテン語computare（計算する）から。英count・computeと同源。「数える」と「語る」の両方の意味があり、仏語のcompterとconterももとは同じ語。o→ue変化。"},
+{w:"vender",p:"v",en:"to sell",fr:"vendre",ex:"En el Rastro venden de todo, hasta cosas que no sabes que necesitas.",exEn:"At the Rastro they sell everything, even things you do not know you need.",exFr:"Au Rastro on vend de tout, même des choses dont on ne sait pas qu'on a besoin.",n:"ラテン語vendere。仏vendre、英vendorと同源。エル・ラストロはマドリードの日曜の蚤の市。看板のSe vendeは「売り物件」。"},
+{w:"el fin de semana",p:"nm",en:"weekend",fr:"le week-end",ex:"Este fin de semana iremos a la sierra, si no llueve.",exEn:"This weekend we will go to the mountains, if it does not rain.",exFr:"Ce week-end nous irons à la montagne, s'il ne pleut pas.",n:"直訳は「週の終わり」。finはラテン語finis（終わり）から、英final・finishと同源。iremosはirの未来形で、ir + -emosと規則的に作る。"},
+{w:"el verano",p:"nm",en:"summer",fr:"l'été",ex:"En verano las ciudades se vacían y los pueblos se llenan.",exEn:"In summer the cities empty and the villages fill up.",exFr:"En été les villes se vident et les villages se remplissent.",n:"俗ラテン語veranum tempus（春の時期）から。ラテン語verは「春」だったが、スペイン語では「夏」に意味がずれた。仏été（aestas）とは別系統。"},
+{w:"el invierno",p:"nm",en:"winter",fr:"l'hiver",ex:"El invierno en Madrid es frío, pero con mucho sol.",exEn:"Winter in Madrid is cold, but very sunny.",exFr:"L'hiver à Madrid est froid, mais très ensoleillé.",n:"ラテン語hibernum（冬の）から。仏hiver、英hibernateと同源。e→ieの二重母音化が起きている。"},
+{w:"la primavera",p:"nf",en:"spring",fr:"le printemps",ex:"En primavera Valencia huele a azahar.",exEn:"In spring Valencia smells of orange blossom.",exFr:"Au printemps Valence sent la fleur d'oranger.",n:"prima vera（最初の春）から。verが「夏」に移ったため、春はこう呼ぶようになった。仏printemps（最初の季節）も同じ発想。oler a〜で「〜の匂いがする」（huele）。"},
+{w:"el otoño",p:"nm",en:"autumn, fall",fr:"l'automne",ex:"En otoño vamos al bosque a buscar setas.",exEn:"In autumn we go to the forest to look for mushrooms.",exFr:"En automne nous allons en forêt chercher des champignons.",n:"ラテン語autumnus。仏automne、英autumnと同源。スペイン北部ではキノコ狩りが秋の人気行事。"},
+{w:"la lluvia",p:"nf",en:"rain",fr:"la pluie",ex:"Con esta lluvia nadie sale a la calle; bueno, solo los gallegos.",exEn:"With this rain nobody goes out; well, only the Galicians.",exFr:"Avec cette pluie personne ne sort ; enfin, seulement les Galiciens.",n:"ラテン語pluvia。仏pluieと同源。pl→llの変化（pluvia>lluvia）。動詞llover（雨が降る）は三人称単数llueveのみで使う。"},
+{w:"el frío",p:"nm",en:"cold",fr:"le froid",ex:"¡Qué frío hace! Cierra la puerta, que se va el calor.",exEn:"How cold it is! Close the door, the heat is getting out.",exFr:"Qu'il fait froid ! Ferme la porte, la chaleur s'en va.",n:"ラテン語frigidus。仏froid、英frigidと同源。天気の寒さはhace frío、人が寒いと感じるのはtengo fríoと使い分ける。"},
+{w:"el calor",p:"nm",en:"heat",fr:"la chaleur",ex:"Tengo tanto calor que voy a dormir en la bañera.",exEn:"I am so hot that I am going to sleep in the bathtub.",exFr:"J'ai tellement chaud que je vais dormir dans la baignoire.",n:"ラテン語calor。英calorie、仏chaleurと同源。仏la chaleurは女性名詞だが、スペイン語は男性名詞。tanto... queで「とても〜なので…」。"},
+{w:"la ropa",p:"nf",en:"clothes",fr:"les vêtements",ex:"Mi hermana lleva ropa para dos semanas a un viaje de fin de semana.",exEn:"My sister packs clothes for two weeks for a weekend trip.",exFr:"Ma sœur emporte des vêtements pour deux semaines pour un week-end.",n:"ゲルマン語起源で、仏robe・英robeと同源（もとは「戦利品」）。単数形のまま集合的に「衣類」を表す。"},
+{w:"los zapatos",p:"nm pl",en:"shoes",fr:"les chaussures",ex:"En Japón te quitas los zapatos en casa; en España, casi nunca.",exEn:"In Japan you take your shoes off at home; in Spain, almost never.",exFr:"Au Japon on enlève ses chaussures à la maison ; en Espagne, presque jamais.",n:"語源ははっきりしない。単数はel zapato。quitarse（脱ぐ）は再帰動詞。"},
+{w:"el pelo",p:"nm",en:"hair",fr:"les cheveux",ex:"Mi padre no pierde pelo; dice que su pelo se va de vacaciones.",exEn:"My father is not losing his hair; he says his hair is going on holiday.",exFr:"Mon père ne perd pas ses cheveux ; il dit que ses cheveux partent en vacances.",n:"ラテン語pilus（毛）から。仏poil（体毛）と同源で、仏cheveux（capillus）とは別系統。スペイン語は髪全体を単数のel peloで表す。"},
+{w:"la cara",p:"nf",en:"face",fr:"le visage",ex:"¡Qué cara pones! ¿No te gusta el pulpo?",exEn:"What a face you are making! Do you not like octopus?",exFr:"Quelle tête tu fais ! Tu n'aimes pas le poulpe ?",n:"ギリシャ語kara（頭）に由来するとされる。poner cara de〜で「〜な顔をする」。口語のtener caraは「厚かましい」。"},
+{w:"el pie",p:"nm",en:"foot",fr:"le pied",ex:"Fuimos a pie hasta la playa y volvimos en taxi.",exEn:"We went on foot to the beach and came back by taxi.",exFr:"Nous sommes allés à pied jusqu'à la plage et nous sommes revenus en taxi.",n:"ラテン語pedem。仏pied、英pedal・pedestrianと同源。a pieで「徒歩で」（仏à piedと同じ）。fuimosはirの点過去で、serと同形。"},
+{w:"la boca",p:"nf",en:"mouth",fr:"la bouche",ex:"En boca cerrada no entran moscas.",exEn:"Flies do not get into a closed mouth.",exFr:"Dans une bouche fermée, les mouches n'entrent pas.",n:"ラテン語bucca（頬）から。仏boucheと同源。例文は「口を閉じていればハエは入らない」＝口は災いのもと、ということわざ。"},
+{w:"el médico",p:"nm",en:"doctor",fr:"le médecin",ex:"El médico me dijo: menos jamón y más paseos.",exEn:"The doctor told me: less ham and more walks.",exFr:"Le médecin m'a dit : moins de jambon et plus de promenades.",n:"ラテン語medicus。仏médecin、英medicalと同源。女性はla médica。dijoはdecirの不規則な点過去。"},
+{w:"el banco",p:"nm",en:"bank, bench",fr:"la banque, le banc",ex:"Me senté en un banco del parque delante del banco.",exEn:"I sat on a park bench in front of the bank.",exFr:"Je me suis assis sur un banc du parc devant la banque.",n:"ゲルマン語起源で、「長椅子」から両替商の台を経て「銀行」の意味が生まれた。英bench・bank、仏banc・banqueと同源で、スペイン語は一語で両方を表す。"},
+{w:"el museo",p:"nm",en:"museum",fr:"le musée",ex:"El Prado es gratis las dos últimas horas, y la cola también es gratis.",exEn:"The Prado is free for the last two hours, and the queue is free too.",exFr:"Le Prado est gratuit les deux dernières heures, et la file d'attente aussi.",n:"ギリシャ語mouseion（ミューズの神殿）から。músicaと同じくミューズが語源。プラド美術館は閉館前の2時間ほどが入場無料になる。"},
+{w:"el parque",p:"nm",en:"park",fr:"le parc",ex:"Los domingos el parque del Retiro está lleno de familias y músicos.",exEn:"On Sundays Retiro park is full of families and musicians.",exFr:"Le dimanche le parc du Retiro est plein de familles et de musiciens.",n:"仏parcからの借用。中世ラテン語parricus（囲い地）から、英parkと同源。"},
+{w:"la iglesia",p:"nf",en:"church",fr:"l'église",ex:"En cada pueblo de España hay una iglesia y un bar, como mínimo.",exEn:"In every village in Spain there is a church and a bar, at least.",exFr:"Dans chaque village d'Espagne il y a une église et un bar, au minimum.",n:"ギリシャ語ekklesia（集会）から。仏église、英ecclesiasticalと同源。"},
+{w:"el pueblo",p:"nm",en:"village, people",fr:"le village, le peuple",ex:"El pueblo de mis abuelos tiene doscientos habitantes y tres fiestas al año.",exEn:"My grandparents' village has two hundred inhabitants and three festivals a year.",exFr:"Le village de mes grands-parents a deux cents habitants et trois fêtes par an.",n:"ラテン語populus（民衆）から。仏peuple、英people・popularと同源。「村」と「民衆・国民」の両方の意味がある。"},
+{w:"el barrio",p:"nm",en:"neighbourhood, district",fr:"le quartier",ex:"En mi barrio todos se conocen, y todos opinan.",exEn:"In my neighbourhood everybody knows each other, and everybody has an opinion.",exFr:"Dans mon quartier tout le monde se connaît, et tout le monde donne son avis.",n:"アラビア語起源の語。se conocenのseは「互いに」を表す相互用法。"},
+{w:"la montaña",p:"nf",en:"mountain",fr:"la montagne",ex:"Los Pirineos son las montañas entre España y Francia.",exEn:"The Pyrenees are the mountains between Spain and France.",exFr:"Les Pyrénées sont les montagnes entre l'Espagne et la France.",n:"俗ラテン語montanea（mons「山」から）。仏montagne、英mountainと同源。仏gnと西ñの対応（montagne/montaña、Espagne/España）はよく見られる。"},
+{w:"el río",p:"nm",en:"river",fr:"la rivière, le fleuve",ex:"El río Guadalquivir pasa por Córdoba y Sevilla.",exEn:"The Guadalquivir river passes through Córdoba and Seville.",exFr:"Le Guadalquivir passe par Cordoue et Séville.",n:"ラテン語rivus（小川）から。英rivuletと同源。グアダルキビルはアラビア語の「大きな川」が語源。"},
+{w:"el árbol",p:"nm",en:"tree",fr:"l'arbre",ex:"En la plaza del pueblo hay un árbol de trescientos años.",exEn:"In the village square there is a three-hundred-year-old tree.",exFr:"Sur la place du village il y a un arbre de trois cents ans.",n:"ラテン語arborem。仏arbre、英arborと同源。語末のrがlに入れ替わった（arbore>árbol）。"},
+{w:"la fruta",p:"nf",en:"fruit",fr:"le fruit, les fruits",ex:"En el mercado la fruta es barata y huele de verdad a fruta.",exEn:"At the market the fruit is cheap and really smells like fruit.",exFr:"Au marché les fruits sont bon marché et ils sentent vraiment le fruit.",n:"ラテン語fructus。仏fruit、英fruitと同源だが、スペイン語では女性名詞で、単数のまま集合的に使うことが多い。"},
+{w:"el huevo",p:"nm",en:"egg",fr:"l'œuf",ex:"Una tortilla de patatas necesita huevos, patatas, aceite y paciencia.",exEn:"A potato omelette needs eggs, potatoes, oil and patience.",exFr:"Une tortilla aux pommes de terre demande des œufs, des pommes de terre, de l'huile et de la patience.",n:"ラテン語ovum。仏œuf、英ovalと同源。o→ueの二重母音化の結果、綴りの決まりで語頭にhが付いた（ue-で始まる語はhue-と書く）。"},
+{w:"el queso",p:"nm",en:"cheese",fr:"le fromage",ex:"El queso manchego va perfecto con membrillo.",exEn:"Manchego cheese goes perfectly with quince paste.",exFr:"Le fromage manchego va parfaitement avec la pâte de coing.",n:"ラテン語caseus。英caseinと同源。仏fromage（型に入れたもの）とは別系統。マンチェゴはラ・マンチャ地方の羊乳チーズ。"},
+{w:"la cerveza",p:"nf",en:"beer",fr:"la bière",ex:"Una cerveza bien fría después del trabajo no tiene precio.",exEn:"A really cold beer after work is priceless.",exFr:"Une bière bien fraîche après le travail, ça n'a pas de prix.",n:"ガリア語起源のラテン語cervesiaから。仏cervoise（昔のビール）と同源。スペインでは小さめの生ビールをcañaと呼ぶ。"},
+{w:"la cuenta",p:"nf",en:"bill, check, account",fr:"l'addition, le compte",ex:"—La cuenta, por favor. —No, no, hoy invito yo.",exEn:"The bill, please. — No, no, today it is my treat.",exFr:"L'addition, s'il vous plaît. — Non, non, aujourd'hui c'est moi qui invite.",n:"contar（数える）の名詞形。仏compte、英accountと同源。invitarは「招待する」から「おごる」の意味にもなる。darse cuenta de〜は「〜に気づく」。"},
+{w:"el precio",p:"nm",en:"price",fr:"le prix",ex:"El precio del menú incluye pan, bebida y postre.",exEn:"The price of the set menu includes bread, a drink and dessert.",exFr:"Le prix du menu comprend le pain, la boisson et le dessert.",n:"ラテン語pretium。仏prix、英price・preciousと同源。"},
+{w:"la llave",p:"nf",en:"key",fr:"la clé",ex:"¿Dónde están las llaves? En la puerta, por fuera. Otra vez.",exEn:"Where are the keys? In the door, on the outside. Again.",exFr:"Où sont les clés ? Sur la porte, à l'extérieur. Encore.",n:"ラテン語clavem。仏clé、英clavicle（鍵の形の骨）と同源。cl→llの変化（clavem>llave、clamare>llamar）。"},
+{w:"la ventana",p:"nf",en:"window",fr:"la fenêtre",ex:"Desde mi ventana veo la Sagrada Familia... y una grúa.",exEn:"From my window I can see the Sagrada Família... and a crane.",exFr:"De ma fenêtre je vois la Sagrada Família... et une grue.",n:"ラテン語ventus（風）から、「風の通り道」が原義。英vent・ventilateと同源。仏fenêtre（fenestra）とは別系統。サグラダ・ファミリアは長く建設中のためクレーンが名物。"},
+{w:"el teléfono",p:"nm",en:"telephone",fr:"le téléphone",ex:"Mi abuela todavía contesta el teléfono con un ¿Diga?",exEn:"My grandmother still answers the phone with a Hello?",exFr:"Ma grand-mère répond encore au téléphone avec un Allô ?",n:"ギリシャ語tele（遠く）＋phone（声）。スペインでは電話に¿Diga?や¿Sí?と出る。携帯電話はel móvil。"},
+{w:"la película",p:"nf",en:"film, movie",fr:"le film",ex:"Vimos una película de Almodóvar y discutimos hasta las dos.",exEn:"We watched an Almodóvar film and argued until two.",exFr:"Nous avons vu un film d'Almodóvar et nous en avons discuté jusqu'à deux heures.",n:"ラテン語pellicula（薄い皮）から、映画フィルムの「膜」を経て映画そのものを指すようになった。アルモドバルはスペインを代表する映画監督。"},
+{w:"el regalo",p:"nm",en:"gift, present",fr:"le cadeau",ex:"El mejor regalo es el que no tienes que devolver.",exEn:"The best present is the one you do not have to return.",exFr:"Le meilleur cadeau est celui qu'on n'a pas besoin de rendre.",n:"仏régaler（もてなす）と同源とされる。動詞はregalar（プレゼントする）。el que〜で「〜するもの」。"},
+{w:"el cumpleaños",p:"nm",en:"birthday",fr:"l'anniversaire",ex:"En mi cumpleaños mis amigos me tiraron de las orejas, una vez por cada año.",exEn:"On my birthday my friends pulled my ears, once for each year.",exFr:"Pour mon anniversaire mes amis m'ont tiré les oreilles, une fois pour chaque année.",n:"cumplir（満たす）＋años（年）の合成語で、単数も複数も同じ形。スペインでは誕生日に年の数だけ耳を引っ張る習慣がある。"},
+{w:"el abuelo",p:"nm",en:"grandfather",fr:"le grand-père",ex:"Mi abuelo tiene noventa años y todavía juega al dominó cada tarde.",exEn:"My grandfather is ninety and still plays dominoes every afternoon.",exFr:"Mon grand-père a quatre-vingt-dix ans et joue encore aux dominos chaque après-midi.",n:"俗ラテン語aviolus（avus「祖父」の縮小形）から。los abuelosは「祖父母」。"},
+{w:"el novio",p:"nm",en:"boyfriend, fiancé, groom",fr:"le petit ami, le fiancé",ex:"Mi hermana tiene novio nuevo, y mi madre ya está preparando la boda.",exEn:"My sister has a new boyfriend, and my mother is already planning the wedding.",exFr:"Ma sœur a un nouveau petit ami, et ma mère prépare déjà le mariage.",n:"ラテン語novius（新しい人）から、nuevoと同語源。「恋人」「婚約者」「新郎」をすべて表す。女性形はnovia。estar + 現在分詞は進行形。"},
+{w:"la clase",p:"nf",en:"class, lesson",fr:"le cours, la classe",ex:"En clase de español aprendí más con las canciones que con los libros.",exEn:"In Spanish class I learned more from songs than from books.",exFr:"En cours d'espagnol j'ai appris plus avec les chansons qu'avec les livres.",n:"ラテン語classis（区分）から。英class、仏classeと同源。「授業」「教室」「種類」の意味がある。más... que...で比較。"},
+{w:"el viaje",p:"nm",en:"trip, journey",fr:"le voyage",ex:"¡Buen viaje! Y trae turrón a la vuelta.",exEn:"Have a good trip! And bring turrón when you come back.",exFr:"Bon voyage ! Et rapporte du touron au retour.",n:"ラテン語viaticum（旅の糧）から。仏voyage、英voyageと同源。a la vueltaで「帰りに」。"},
+{w:"rico",p:"adj",en:"rich, delicious",fr:"riche, délicieux",ex:"Esta paella está riquísima; el cocinero no es rico, pero debería serlo.",exEn:"This paella is delicious; the cook is not rich, but he should be.",exFr:"Cette paella est délicieuse ; le cuisinier n'est pas riche, mais il devrait l'être.",n:"ゲルマン語起源で、仏riche、英richと同源。ser rico（金持ちだ）とestar rico（おいしい）で意味が変わる、ser/estarの違いの典型例。"},
+{w:"caliente",p:"adj",en:"hot (temperature)",fr:"chaud",ex:"Cuidado, el plato está muy caliente.",exEn:"Careful, the plate is very hot.",exFr:"Attention, l'assiette est très chaude.",n:"ラテン語calentem（温かい）から、calorと同じ語根。辛い意味のhotはpicante、気温はhace calorと言い、calienteは物の温度に使う。"},
+{w:"limpio",p:"adj",en:"clean",fr:"propre",ex:"La casa está limpia porque viene mi suegra.",exEn:"The house is clean because my mother-in-law is coming.",exFr:"La maison est propre parce que ma belle-mère vient.",n:"ラテン語limpidus（澄んだ）から。状態を表すのでestarと使う。"},
+{w:"sucio",p:"adj",en:"dirty",fr:"sale",ex:"Después del partido, las botas están sucias y los jugadores también.",exEn:"After the match, the boots are dirty and so are the players.",exFr:"Après le match, les chaussures sont sales et les joueurs aussi.",n:"ラテン語sucidus（汁気の多い）から。limpioの反対語。仏sale（ゲルマン語起源）とは別語源。"},
+{w:"lleno",p:"adj",en:"full",fr:"plein",ex:"El metro va lleno; espera al siguiente, que también va lleno.",exEn:"The metro is full; wait for the next one, which is full too.",exFr:"Le métro est plein ; attends le suivant, qui est plein aussi.",n:"ラテン語plenus。仏plein、英plenty・completeと同源。pl→llの規則的な変化。"},
+{w:"rápido",p:"adj",en:"fast, quick",fr:"rapide",ex:"Los madrileños hablan rápido, andan rápido y comen despacio.",exEn:"Madrilenians talk fast, walk fast and eat slowly.",exFr:"Les Madrilènes parlent vite, marchent vite et mangent lentement.",n:"ラテン語rapidus（奪い去る）から。形容詞のまま副詞としても使える（hablar rápido）。反対語はlento、副詞ではdespacio。"},
+{w:"fuerte",p:"adj",en:"strong",fr:"fort",ex:"El café aquí es tan fuerte que te despierta solo con mirarlo.",exEn:"The coffee here is so strong it wakes you up just by looking at it.",exFr:"Le café ici est si fort qu'il te réveille rien qu'en le regardant.",n:"ラテン語fortis。仏fort、英fortitudeと同源。o→ueの二重母音化の例。"},
+{w:"simpático",p:"adj",en:"nice, friendly",fr:"sympathique",ex:"El camarero es muy simpático, pero se olvida de todo.",exEn:"The waiter is very friendly, but he forgets everything.",exFr:"Le serveur est très sympathique, mais il oublie tout.",n:"ギリシャ語sympatheia（共感）から。仏sympathiqueと意味も同じ。英sympatheticは「同情的な」なので偽の友。"},
+{w:"guapo",p:"adj",en:"good-looking",fr:"beau",ex:"—¡Qué guapo estás hoy! —¿Solo hoy?",exEn:"You look great today! — Only today?",exFr:"Tu es beau aujourd'hui ! — Seulement aujourd'hui ?",n:"語源は諸説ある。スペインでは男女ともに「かっこいい・きれい」に使い、親しみを込めた呼びかけにもなる。estar guapoは「今日は素敵に見える」。"},
+{w:"divertido",p:"adj",en:"fun, funny",fr:"amusant",ex:"La fiesta fue muy divertida, pero no recuerdo el final.",exEn:"The party was a lot of fun, but I do not remember the end.",exFr:"La fête était très amusante, mais je ne me souviens pas de la fin.",n:"divertir（楽しませる）の過去分詞から。英diversionと同源。fueはserの点過去。"},
+{w:"aburrido",p:"adj",en:"bored, boring",fr:"ennuyé, ennuyeux",ex:"La película es tan aburrida que el perro se durmió.",exEn:"The film is so boring that the dog fell asleep.",exFr:"Le film est si ennuyeux que le chien s'est endormi.",n:"aburrir（退屈させる）の過去分詞。ser aburrido（退屈な）とestar aburrido（退屈している）で意味が変わる。"},
+{w:"tranquilo",p:"adj",en:"calm, quiet",fr:"calme, tranquille",ex:"Tranquilo, en España nadie cena antes de las nueve.",exEn:"Relax, in Spain nobody has dinner before nine.",exFr:"Du calme, en Espagne personne ne dîne avant neuf heures.",n:"ラテン語tranquillus。仏tranquille、英tranquilと同源。¡Tranquilo!は「落ち着いて・大丈夫」という定番の声かけ。"},
+{w:"contento",p:"adj",en:"happy, pleased",fr:"content",ex:"Estoy contento porque mañana empiezan las vacaciones.",exEn:"I am happy because the holidays start tomorrow.",exFr:"Je suis content parce que les vacances commencent demain.",n:"ラテン語contentus（満たされた）から。仏content、英contentと同源。一時的な気分なのでestarと使う。"},
+{w:"enfermo",p:"adj",en:"ill, sick",fr:"malade",ex:"Estoy enfermo, pero no tanto como para no ver el partido.",exEn:"I am ill, but not so ill that I cannot watch the match.",exFr:"Je suis malade, mais pas au point de ne pas regarder le match.",n:"ラテン語infirmus（弱い）から。英infirm・infirmaryと同源。仏maladeとは別系統。"},
+{w:"listo",p:"adj",en:"ready, clever",fr:"prêt, malin",ex:"Mi gato es listo: siempre está listo para comer.",exEn:"My cat is clever: it is always ready to eat.",exFr:"Mon chat est malin : il est toujours prêt à manger.",n:"語源ははっきりしない。ser listo（賢い）とestar listo（準備ができている）で意味が変わる、ser/estarの違いの典型例。"},
+{w:"quién",p:"pron",en:"who",fr:"qui",ex:"¿Quién se ha comido el último trozo de tortilla?",exEn:"Who has eaten the last piece of tortilla?",exFr:"Qui a mangé le dernier morceau de tortilla ?",n:"ラテン語quemから。仏quiと同源。複数形quiénesがある点がフランス語と違う。"},
+{w:"cuál",p:"pron",en:"which, what",fr:"quel, lequel",ex:"¿Cuál es tu plato favorito? ¿Y cuál es el segundo?",exEn:"What is your favourite dish? And what is the second?",exFr:"Quel est ton plat préféré ? Et quel est le deuxième ?",n:"ラテン語qualis（どのような）から。仏quel、英qualityと同源。「〜は何ですか」と選ぶときはquéではなくcuál esを使う（¿Cuál es tu nombre?）。"},
+{w:"cuánto",p:"adj/pron",en:"how much, how many",fr:"combien",ex:"—¿Cuánto cuesta este abanico? —Para ti, veinte euros. —¿Y para los demás?",exEn:"How much is this fan? — For you, twenty euros. — And for everyone else?",exFr:"Combien coûte cet éventail ? — Pour toi, vingt euros. — Et pour les autres ?",n:"ラテン語quantus。英quantityと同源。後ろの名詞に合わせてcuánta/cuántos/cuántasと変化する（¿Cuántos años tienes?）。"},
+{w:"cómo",p:"adv",en:"how",fr:"comment",ex:"¿Cómo se dice sobremesa en inglés? No se dice.",exEn:"How do you say sobremesa in English? You do not.",exFr:"Comment dit-on sobremesa en anglais ? On ne le dit pas.",n:"ラテン語quomodo（どのように）から。仏commentと同源。記号なしのcomoは「〜のように」「〜なので」。"},
+{w:"por qué",p:"adv",en:"why",fr:"pourquoi",ex:"—¿Por qué cenáis tan tarde? —¿Y por qué no?",exEn:"Why do you have dinner so late? — And why not?",exFr:"Pourquoi dînez-vous si tard ? — Et pourquoi pas ?",n:"por + qué（何のために）で、仏pourquoiと同じ構造。答えは一語のporque。cenáisはスペイン本国で使うvosotros（君たち）の活用。"},
+{w:"alguno",p:"adj/pron",en:"some, any",fr:"quelque, un",ex:"—¿Tienes alguna pregunta? —Sí, ¿a qué hora comemos?",exEn:"Do you have any questions? — Yes, what time do we eat?",exFr:"Tu as des questions ? — Oui, à quelle heure on mange ?",n:"ラテン語aliquis unus（ある一つ）から。男性単数名詞の前ではalgúnになる（algún día）。"},
+{w:"ninguno",p:"adj/pron",en:"no, none",fr:"aucun",ex:"No tengo ningún problema con madrugar... si es a las diez.",exEn:"I have no problem at all with getting up early... if it is at ten.",exFr:"Je n'ai aucun problème pour me lever tôt... si c'est à dix heures.",n:"nec unus（一つもない）から。男性単数名詞の前ではningún。動詞の後ろに置くときはno... ningúnの二重否定になる。madrugarは「早起きする」。"},
+{w:"cada",p:"adj",en:"each, every",fr:"chaque",ex:"Cada pueblo tiene su fiesta, y cada fiesta tiene su comida.",exEn:"Every village has its festival, and every festival has its food.",exFr:"Chaque village a sa fête, et chaque fête a son plat.",n:"ギリシャ語kata（〜ごとに）がラテン語経由で入った語。仏chaqueと同源。性数変化せず、常にcadaのまま。"},
+{w:"entre",p:"prep",en:"between, among",fr:"entre",ex:"Entre tú y yo, la tortilla de tu madre es mejor que la mía.",exEn:"Between you and me, your mother's omelette is better than mine.",exFr:"Entre toi et moi, l'omelette de ta mère est meilleure que la mienne.",n:"ラテン語inter。仏entre、英inter-と同源。前置詞の後ろは普通mí・tiだが、entreだけはtú y yoと主格を使う例外。"},
+{w:"sobre",p:"prep",en:"on, about, over",fr:"sur, au sujet de",ex:"Dejé una nota sobre la mesa sobre la cena de mañana.",exEn:"I left a note on the table about tomorrow's dinner.",exFr:"J'ai laissé un mot sur la table au sujet du dîner de demain.",n:"ラテン語super（上に）。仏sur、英superと同源。「〜の上に」と「〜について」の両方。名詞el sobreは「封筒」。"},
+{w:"desde",p:"prep",en:"from, since",fr:"depuis, de",ex:"Desde la terraza se ve toda la ciudad.",exEn:"You can see the whole city from the terrace.",exFr:"Depuis la terrasse on voit toute la ville.",n:"de + ex + de の合成から。場所の起点「〜から」と時間の「〜以来」を表す。desde hace + 期間で「〜前から」（desde hace dos años）。"},
+{w:"durante",p:"prep",en:"during, for",fr:"pendant",ex:"Durante la siesta, la ciudad se queda en silencio.",exEn:"During the siesta, the city goes quiet.",exFr:"Pendant la sieste, la ville reste silencieuse.",n:"durar（続く）の現在分詞から生まれた前置詞。英duringもdure（続く）から同じように生まれた。"},
+{w:"aunque",p:"conj",en:"although, even if",fr:"bien que, même si",ex:"Aunque llueva, iremos a la playa. Somos optimistas.",exEn:"Even if it rains, we will go to the beach. We are optimists.",exFr:"Même s'il pleut, nous irons à la plage. Nous sommes optimistes.",n:"aun（〜さえ）+ que。後ろが直説法なら「〜だけれども」（事実）、接続法（llueva）なら「たとえ〜でも」（仮定）と意味が変わる。4級でよく問われる。"},
+{w:"entonces",p:"adv",en:"then, so",fr:"alors",ex:"—No hay pan. —Entonces comemos churros.",exEn:"There is no bread. — Then we eat churros.",exFr:"Il n'y a pas de pain. — Alors on mange des churros.",n:"ラテン語in tunc（その時に）から。「その時」と「それなら」の両方の意味で、仏alorsと使い方がほぼ同じ。"},
+{w:"pronto",p:"adv",en:"soon, early",fr:"bientôt, tôt",ex:"¡Hasta pronto! Volveré en verano, con más español.",exEn:"See you soon! I will come back in summer, with more Spanish.",exFr:"À bientôt ! Je reviendrai en été, avec plus d'espagnol.",n:"ラテン語promptus（準備された）から。英promptと同源。¡Hasta pronto!は「またすぐにね」。volveréは未来形。"}
+]}
+];
+const TOTAL_LEVELS = 15;
+
+/* ============ STATE ============ */
+const KEY = "es4-progress";
+let S = {learned:{}, last:{}, rate:0.85, hideLearned:false, autoplay:false, mode:"card", autoLast:{}, bgAudio:false};
+let view = "home", cur = null, auto = null;
+
+async function load(){
+  try{
+    const raw = localStorage.getItem(KEY);
+    if(raw) S = Object.assign(S, JSON.parse(raw));
+  }catch(e){ console.warn("storage unavailable", e); }
+}
+let saveTimer = null;
+function save(){
+  clearTimeout(saveTimer);
+  saveTimer = setTimeout(()=>{
+    try{ localStorage.setItem(KEY, JSON.stringify(S)); }
+    catch(e){ console.error("save failed", e); }
+  }, 250);
+}
+
+/* ============ AUDIO ============ */
+let esVoice = null, enVoice = null;
+function pickVoice(){
+  const vs = speechSynthesis.getVoices();
+  esVoice = vs.find(v=>/^es[-_]ES/i.test(v.lang)) || vs.find(v=>/^es/i.test(v.lang)) || null;
+  enVoice = vs.find(v=>/^en[-_]US/i.test(v.lang)) || vs.find(v=>/^en/i.test(v.lang)) || null;
+}
+if (window.speechSynthesis){ pickVoice(); speechSynthesis.onvoiceschanged = pickVoice; }
+function say(text){
+  if(!window.speechSynthesis) return;
+  speechSynthesis.cancel();
+  const u = new SpeechSynthesisUtterance(text.replace(/[¡¿—]/g," "));
+  u.lang = "es-ES"; u.rate = S.rate;
+  if(esVoice) u.voice = esVoice;
+  speechSynthesis.speak(u);
+}
+
+/* 聞き流しモード用：読み上げが終わるまで待つ */
+const forSpeech = t => t.replace(/\([^)]*\)/g,"").replace(/[¡¿—]/g," ").replace(/\s+/g," ").trim();
+let _utt = null;
+function speak(text, lang, rate){
+  return new Promise(res=>{
+    if(!window.speechSynthesis || !text) return res();
+    const u = new SpeechSynthesisUtterance(forSpeech(text));
+    u.lang = lang; u.rate = rate;
+    const v = lang.startsWith("es") ? esVoice : enVoice;
+    if(v) u.voice = v;
+    let done = false;
+    const fin = ()=>{ if(done) return; done = true; clearTimeout(t); res(); };
+    u.onend = fin; u.onerror = fin;
+    // onend が発火しない端末向けの保険
+    const t = setTimeout(fin, 4000 + text.length * 110 / rate);
+    _utt = u;
+    speechSynthesis.speak(u);
+  });
+}
+const wait = ms => new Promise(r=>setTimeout(r, ms));
+
+/* ============ HELPERS ============ */
+const esc = s => s.replace(/[&<>"]/g, c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const lvKey = (lv,i) => lv+":"+i;
+function stats(lv){
+  const L = LEVELS.find(x=>x.id===lv);
+  if(!L) return {done:0,total:100,pct:0};
+  const done = L.words.reduce((a,_,i)=> a + (S.learned[lvKey(lv,i)]?1:0), 0);
+  return {done, total:L.words.length, pct: Math.round(done/L.words.length*100)};
+}
+const SPK = '<svg viewBox="0 0 24 24"><path d="M4 9v6h4l5 4V5L8 9H4zm12.5 3a4.5 4.5 0 0 0-2.5-4v8a4.5 4.5 0 0 0 2.5-4z"/></svg>';
+
+/* ============ RENDER ============ */
+const app = document.getElementById("app");
+
+function renderHome(){
+  let all=0, allDone=0;
+  LEVELS.forEach(L=>{ const s=stats(L.id); all+=s.total; allDone+=s.done; });
+  const cards = [];
+  for(let i=1;i<=TOTAL_LEVELS;i++){
+    const L = LEVELS.find(x=>x.id===i);
+    if(!L){
+      cards.push(`<button class="lv" disabled><span class="n">Nivel ${i}</span><span class="r">${(i-1)*100+1}–${i*100}</span><div class="bar"><i style="width:0"></i></div><span class="st">準備中</span></button>`);
+      continue;
+    }
+    const s = stats(i);
+    cards.push(`<button class="lv ${s.pct===100?"done":""}" data-lv="${i}">
+      <span class="n">${L.title}</span><span class="r">${L.range}</span>
+      <div class="bar"><i style="width:${s.pct}%"></i></div>
+      <span class="st"><span>${s.done} / ${s.total}</span><span>${s.pct}%</span></span></button>`);
+  }
+  app.innerHTML = `
+    <div class="masthead"><h1 class="serif">Vocabulario</h1><span>西検4級</span></div>
+    <div class="totals"><b>${all?Math.round(allDone/all*100):0}%</b><small>覚えた単語 ${allDone} / ${all}</small></div>
+    <div class="seg" role="tablist">
+      <button data-m="card" class="${S.mode==="card"?"on":""}">カード学習</button>
+      <button data-m="auto" class="${S.mode==="auto"?"on":""}">聞き流し</button>
+    </div>
+    <div class="opts">
+      <label class="opt"><span class="lb">覚えた単語を出さない</span>
+        <input type="checkbox" id="hl" ${S.hideLearned?"checked":""}><span class="sw"></span></label>
+      ${S.mode==="card" ? `<label class="opt"><span class="lb">カードを開いたら音声を再生</span>
+        <input type="checkbox" id="ap" ${S.autoplay?"checked":""}><span class="sw"></span></label>`
+      : `<label class="opt"><span class="lb">バックグラウンド再生（試験的）</span>
+        <input type="checkbox" id="bg" ${S.bgAudio?"checked":""}><span class="sw"></span></label>`}
+      <div class="opt"><label for="rt">読み上げ速度</label>
+        <input type="range" id="rt" min="0.5" max="1.2" step="0.05" value="${S.rate}"></div>
+    </div>
+    <div class="levels">${cards.join("")}</div>`;
+
+  app.querySelector("#hl").onchange = e=>{ S.hideLearned = e.target.checked; save(); };
+  const ap = app.querySelector("#ap"); if(ap) ap.onchange = e=>{ S.autoplay = e.target.checked; save(); };
+  const bg = app.querySelector("#bg"); if(bg) bg.onchange = e=>{ S.bgAudio = e.target.checked; save(); };
+  app.querySelectorAll(".seg button").forEach(b=> b.onclick = ()=>{ S.mode = b.dataset.m; save(); renderHome(); });
+  app.querySelector("#rt").oninput = e=>{ S.rate = parseFloat(e.target.value); save(); };
+  app.querySelectorAll(".lv[data-lv]").forEach(b=> b.onclick = ()=> S.mode==="auto" ? startAuto(+b.dataset.lv) : startLevel(+b.dataset.lv));
+}
+
+function startLevel(lv){
+  const L = LEVELS.find(x=>x.id===lv);
+  let idx = L.words.map((_,i)=>i);
+  if(S.hideLearned) idx = idx.filter(i=>!S.learned[lvKey(lv,i)]);
+  const last = S.last[lv] ?? -1;
+  let pos = idx.findIndex(i=>i>last);
+  if(pos < 0) pos = 0;
+  cur = {lv, idx, pos, open:false};
+  view = "study";
+  render();
+}
+
+function renderStudy(){
+  const {lv, idx, pos, open} = cur;
+  const L = LEVELS.find(x=>x.id===lv);
+  if(!idx.length){
+    app.innerHTML = `<div class="top"><button class="back" id="bk">← レベル一覧</button></div>
+      <div class="empty">このレベルは全部覚えました。<br>「覚えた単語を出さない」をオフにすると復習できます。</div>`;
+    app.querySelector("#bk").onclick = ()=>{ view="home"; render(); };
+    return;
+  }
+  const i = idx[pos], d = L.words[i];
+  const known = !!S.learned[lvKey(lv,i)];
+  const s = stats(lv);
+  app.innerHTML = `
+    <div class="top"><button class="back" id="bk">← レベル一覧</button>
+      <span class="pos">${pos+1} / ${idx.length}　·　覚えた ${s.done}</span></div>
+    <div class="topbar"><i style="width:${(pos+1)/idx.length*100}%"></i></div>
+    <div class="card ${known?"known":""}">
+      <div class="headword serif">${esc(d.w)}</div>
+      <span class="tag">${esc(d.p)}</span>
+      <button class="say" data-say="w">${SPK}word</button>
+      <p class="ex">${esc(d.ex)} <button class="say" data-say="e">${SPK}frase</button></p>
+      <div id="back" class="${open?"":"hide"}">
+        <div class="rule"></div>
+        <div class="trs">
+          <div class="tr"><span class="lg">EN</span><span>${esc(d.en)}</span></div>
+          <div class="tr"><span class="lg">FR</span><span>${esc(d.fr)}</span></div>
+        </div>
+        <div class="trs">
+          <div class="tr"><span class="lg">EN</span><span class="sm">${esc(d.exEn)}</span></div>
+          <div class="tr"><span class="lg">FR</span><span class="sm">${esc(d.exFr)}</span></div>
+        </div>
+        <div class="note"><h3>NOTA</h3>${esc(d.n)}</div>
+      </div>
+    </div>
+    <div class="acts">${ open
+      ? `<button class="btn ghost" id="skip">まだ</button><button class="btn yes" id="got">覚えた</button>`
+      : `<button class="btn primary" id="show">答えを見る</button>` }</div>`;
+
+  app.querySelector("#bk").onclick = ()=>{ view="home"; render(); };
+  app.querySelectorAll("[data-say]").forEach(b=> b.onclick = ()=> say(b.dataset.say==="w" ? d.w : d.ex));
+  if(!open){
+    app.querySelector("#show").onclick = ()=>{ cur.open = true; render(); };
+    if(S.autoplay) say(d.w);
+  }else{
+    app.querySelector("#got").onclick = ()=>{ S.learned[lvKey(lv,i)] = true; advance(); };
+    app.querySelector("#skip").onclick = ()=>{ advance(); };
+  }
+}
+
+function advance(){
+  const {lv, idx, pos} = cur;
+  S.last[lv] = idx[pos];
+  save();
+  if(pos + 1 >= idx.length){
+    view = "home"; render(); return;
+  }
+  cur.pos = pos + 1; cur.open = false;
+  render();
+  window.scrollTo(0,0);
+}
+
+/* ============ 聞き流しモード ============ */
+let runId = 0, wakeLock = null, bgEl = null;
+const IC = {
+  play:'<svg viewBox="0 0 24 24"><path d="M7 4.5v15l13-7.5z"/></svg>',
+  pause:'<svg viewBox="0 0 24 24"><path d="M6 4h4.5v16H6zM13.5 4H18v16h-4.5z"/></svg>',
+  prev:'<svg viewBox="0 0 24 24"><path d="M5 5h2.5v14H5zM20 5v14L8.5 12z"/></svg>',
+  next:'<svg viewBox="0 0 24 24"><path d="M16.5 5H19v14h-2.5zM4 5v14l11.5-7z"/></svg>'
+};
+
+function startAuto(lv){
+  const L = LEVELS.find(x=>x.id===lv);
+  let idx = L.words.map((_,i)=>i);
+  if(S.hideLearned) idx = idx.filter(i=>!S.learned[lvKey(lv,i)]);
+  const last = S.autoLast[lv] ?? -1;
+  let pos = idx.findIndex(i=>i>last);
+  if(pos < 0) pos = 0;
+  auto = {lv, idx, pos, playing:false, ph:-1};
+  view = "auto";
+  render();
+  if(idx.length) play();   // タップ操作の直後に開始（ブラウザの自動再生制限対策）
+}
+
+async function play(){
+  if(!auto || auto.playing || !auto.idx.length) return;
+  auto.playing = true;
+  keepAwake();
+  if(S.bgAudio) startBg();
+  const id = ++runId;
+  const L = LEVELS.find(x=>x.id===auto.lv);
+  while(auto && auto.playing && id===runId){
+    const i = auto.idx[auto.pos], d = L.words[i];
+    renderAuto(); setMeta(d);
+    const steps = [[d.w,"es-ES",S.rate,700],[d.en,"en-US",1,1000],[d.ex,"es-ES",S.rate,700],[d.exEn,"en-US",1,1800]];
+    for(let k=0;k<steps.length;k++){
+      if(id!==runId) return;
+      const [t,lg,r,gap] = steps[k];
+      setPhase(k);
+      await speak(t,lg,r);
+      if(id!==runId) return;
+      await wait(gap);
+    }
+    if(id!==runId) return;
+    S.autoLast[auto.lv] = i; save();
+    auto.pos = (auto.pos + 1) % auto.idx.length;   // 最後まで行ったら先頭に戻って繰り返す
+  }
+}
+function pause(){
+  if(!auto) return;
+  auto.playing = false; runId++;
+  if(window.speechSynthesis) speechSynthesis.cancel();
+  auto.ph = -1;
+  renderAuto(); setMeta();
+}
+function skip(delta){
+  if(!auto || !auto.idx.length) return;
+  const was = auto.playing;
+  auto.playing = false; runId++;
+  if(window.speechSynthesis) speechSynthesis.cancel();
+  auto.pos = (auto.pos + delta + auto.idx.length) % auto.idx.length;
+  auto.ph = -1;
+  if(was) play(); else renderAuto();
+}
+function exitAuto(){
+  pause();
+  if(wakeLock){ wakeLock.release().catch(()=>{}); wakeLock = null; }
+  if(bgEl) bgEl.pause();
+  if("mediaSession" in navigator) navigator.mediaSession.metadata = null;
+  auto = null; view = "home"; render();
+}
+
+function setPhase(k){
+  if(!auto) return;
+  auto.ph = k;
+  app.querySelectorAll(".card.auto .line").forEach(el=> el.classList.toggle("cur", +el.dataset.ph===k || k<0));
+}
+
+function renderAuto(){
+  const {lv, idx, pos, playing} = auto;
+  const L = LEVELS.find(x=>x.id===lv);
+  if(!idx.length){
+    app.innerHTML = `<div class="top"><button class="back" id="bk">← レベル一覧</button></div>
+      <div class="empty">このレベルは全部覚えました。<br>「覚えた単語を出さない」をオフにすると聞き流せます。</div>`;
+    app.querySelector("#bk").onclick = exitAuto;
+    return;
+  }
+  const d = L.words[idx[pos]];
+  app.innerHTML = `
+    <div class="top"><button class="back" id="bk">← レベル一覧</button>
+      <span class="pos">${L.title}　${pos+1} / ${idx.length}</span></div>
+    <div class="topbar"><i style="width:${(pos+1)/idx.length*100}%"></i></div>
+    <div class="card auto">
+      <div class="line" data-ph="0"><div class="headword serif">${esc(d.w)}</div></div>
+      <div class="line" data-ph="1"><div class="en">${esc(d.en)}</div></div>
+      <div class="line" data-ph="2"><p class="ex">${esc(d.ex)}</p></div>
+      <div class="line" data-ph="3"><div class="en">${esc(d.exEn)}</div></div>
+    </div>
+    <div class="ctrl">
+      <button id="prev" aria-label="前の単語">${IC.prev}</button>
+      <button id="pp" class="pp" aria-label="${playing?"一時停止":"再生"}">${playing?IC.pause:IC.play}</button>
+      <button id="next" aria-label="次の単語">${IC.next}</button>
+    </div>
+    <p class="hint">再生中は画面がつけたままになります。最後の単語まで行くと先頭に戻って繰り返します。<br>
+    ${S.bgAudio ? "バックグラウンド再生：オン（画面を消しても続くかは端末によります）" : "画面を消すと止まります。止めたくない場合はレベル一覧で「バックグラウンド再生」をお試しください。"}</p>`;
+  app.querySelector("#bk").onclick = exitAuto;
+  app.querySelector("#pp").onclick = ()=> auto.playing ? pause() : play();
+  app.querySelector("#prev").onclick = ()=> skip(-1);
+  app.querySelector("#next").onclick = ()=> skip(1);
+  setPhase(auto.ph);
+}
+
+/* 画面を消さない（Wake Lock） */
+async function keepAwake(){
+  try{
+    if("wakeLock" in navigator && !wakeLock){
+      wakeLock = await navigator.wakeLock.request("screen");
+      wakeLock.addEventListener("release", ()=>{ wakeLock = null; });
+    }
+  }catch(e){ console.warn("wake lock", e); }
+}
+document.addEventListener("visibilitychange", ()=>{
+  if(document.visibilityState==="visible" && auto && auto.playing) keepAwake();
+});
+
+/* バックグラウンド再生（試験的）：無音の音声を流してメディアとして扱わせ、
+   車のハンドル・Bluetoothの再生/停止/次へボタンにも対応させる */
+function silentWav(sec){
+  const rate = 8000, n = rate*sec, buf = new ArrayBuffer(44+n), v = new DataView(buf);
+  const w = (o,str)=>{ for(let i=0;i<str.length;i++) v.setUint8(o+i, str.charCodeAt(i)); };
+  w(0,"RIFF"); v.setUint32(4,36+n,true); w(8,"WAVE"); w(12,"fmt ");
+  v.setUint32(16,16,true); v.setUint16(20,1,true); v.setUint16(22,1,true);
+  v.setUint32(24,rate,true); v.setUint32(28,rate,true); v.setUint16(32,1,true); v.setUint16(34,8,true);
+  w(36,"data"); v.setUint32(40,n,true);
+  for(let i=0;i<n;i++) v.setUint8(44+i,128);
+  return URL.createObjectURL(new Blob([buf],{type:"audio/wav"}));
+}
+function startBg(){
+  if(!bgEl){ bgEl = new Audio(silentWav(10)); bgEl.loop = true; }
+  bgEl.play().catch(e=>console.warn("bg audio", e));
+  if("mediaSession" in navigator){
+    const ms = navigator.mediaSession;
+    ms.setActionHandler("play", ()=>play());
+    ms.setActionHandler("pause", ()=>pause());
+    ms.setActionHandler("nexttrack", ()=>skip(1));
+    ms.setActionHandler("previoustrack", ()=>skip(-1));
+  }
+}
+function setMeta(d){
+  if(!S.bgAudio || !("mediaSession" in navigator) || !auto) return;
+  const ms = navigator.mediaSession;
+  if(d && "MediaMetadata" in window){
+    ms.metadata = new MediaMetadata({title:d.w, artist:d.en, album:"Vocabulario Nivel "+auto.lv,
+      artwork:[{src:"icon-512.png",sizes:"512x512",type:"image/png"}]});
+  }
+  ms.playbackState = auto.playing ? "playing" : "paused";
+}
+
+function render(){
+  if(view==="home") renderHome();
+  else if(view==="auto") renderAuto();
+  else renderStudy();
+}
+
+load().then(render);
+if("serviceWorker" in navigator){
+  navigator.serviceWorker.register("sw.js").catch(e=>console.warn("sw", e));
+}
+</script>
+</body>
+</html>
